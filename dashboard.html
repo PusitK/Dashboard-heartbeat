@@ -17,7 +17,7 @@
     <link rel='stylesheet' href='css/bootstrap.min.css' />
     <link rel='stylesheet' href='css/dashboard-style.css' />
     <link rel='stylesheet' href='css/font-awesome.min.css' />
-
+    <link rel='stylesheet' href='css/highcharts.css' />
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 </head>
 
@@ -211,6 +211,46 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Status Log</strong></h5>
+                            <div id="graph" style="height:250px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body card-position">
+                            <h5 class="font"><strong>Page Current Display</strong></h5>
+                            <i class="fa fa-tablet icon-card text-center huge-icon" aria-hidden="true" style="font-size:150px"></i>
+                            <h1 class="font text-card text-center">Question 1</h1>
+                            <i class="fa fa-desktop icon-card icon-position" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Storage</strong></h5>
+                            <h1 class="font text-card">27.5 &deg;C</h1>
+                            <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Memory</strong></h5>
+                            <h1 class="font text-card">27.5 &deg;C</h1>
+                            <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -219,6 +259,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+<script src="js/highcharts.js"></script>
 <script src="js/script.js"></script>
+
 
 </html>
