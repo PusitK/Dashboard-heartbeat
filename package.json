@@ -1,0 +1,15 @@
+{
+  "name": "Dashboard-heartbeat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "babel-preset-env": "^1.6.0"
+  },
+  "devDependencies": {},
+  "author": "Bright",
+  "license": "ISC",
+  "scripts": {
+    "babel": "babel --presets es2015 js/script.js -o src/script.js"
+  }
+}

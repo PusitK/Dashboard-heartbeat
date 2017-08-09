@@ -2,18 +2,223 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-        <!--[if lt IE 7]>
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--CSS-->
+
+    <link rel='stylesheet' href='css/bootstrap.min.css' />
+    <link rel='stylesheet' href='css/dashboard-style.css' />
+    <link rel='stylesheet' href='css/font-awesome.min.css' />
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+
+<body>
+    <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        
-    </body>
+    <!-- The above form looks like this -->
+    <nav class="navbar navbar-default navbar-fixed-top navstyle">
+        <div class="navstyle-colorBar"></div>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <h1 class="navstyle-title" onClick="location.reload(true);">Report</h1>
+                <span class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-caret-down navstyle-icon" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+        <h3 class="font">Dashboard</h3>
+        <hr>
+        <div class="row">
+            <div class="col-xs-6 pull-right ">
+
+                <ul class="legend">
+                    <li>
+                        <h5 class="font"><span class="circle circle-online" style="margin-right:8px"></span> Super Awesome</h5>
+                    </li>
+                    <li>
+                        <h5 class="font"><span class="circle circle-warning" style="margin-right:8px"></span> Awesome</h5>
+                    </li>
+                    <li>
+                        <h5 class="font"><span class="circle circle-offline" style="margin-right:8px"></span> Kinda Awesome</h5>
+                    </li>
+                    <li>
+                        <h5 class="font"><span class="circle circle-unknown" style="margin-right:8px"></span> Not Awesome</h5>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="row panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr class="row-header">
+                            <th>Branch</th>
+                            <th>Device Status</th>
+                            <th>Battery Percent</th>
+                            <th>Battery Health</th>
+                            <th>Battery Temperature</th>
+                            <th>Page Current</th>
+                            <th>Storage</th>
+                            <th>Memory</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-toggle="tooltip" title="Click to show more detail" data-placement="right">
+                            <td>Mega Bangna</td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-offline"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-warning"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-unknown"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                        </tr>
+                        <tr data-toggle="tooltip" title="Click to show more detail" data-placement="right">
+                            <td>สุขุมวิท</td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                        </tr>
+                        <tr data-toggle="tooltip" title="Click to show more detail" data-placement="right">
+                            <td>Emquartier</td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                            <td>
+                                <div class="circle circle-online"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+        <hr>
+        <section>
+            <div class="row">
+                <h4 class="font">Mega Bangna 
+                    <p class="font status">Status : 
+                        <i class="font status status-online text-center">
+                            Online
+                        </i>
+                    </p>
+                    <p class="font status">App Version : 1.0.1</p>
+                </h4>
+            </div>
+            <div class="row margin-top-2">
+
+                <div class="col-xs-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Device Status </strong></h5>
+                            <h1 class="font text-card">Active</h1>
+                            <i class="fa fa-tablet icon-card pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            
+                            <h5 class="font"><strong>Battery Percent </strong></h5>
+                            <h1 class="font text-card">90%</h1>
+                            <i class="fa fa-battery-full icon-card pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Battery Health </strong></h5>
+                            <h1 class="text-card font text-card">Normal</h1>
+                            <i class="fa fa-heartbeat icon-card pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Battery Temperature </strong></h5>
+                            <h1 class="font text-card">27.5 &deg;C</h1>
+                            <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/script.js"></script>
+
 </html>
