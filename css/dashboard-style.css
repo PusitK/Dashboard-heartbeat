@@ -28,6 +28,7 @@ span {
     font-weight: normal;
     margin: 0;
     color:#777777;
+    word-wrap: break-word;
 }
 th{
     font-weight: 600;
@@ -50,7 +51,7 @@ table{
      text-align: center;
      margin-bottom:0 !important;
 }
-.font{
+.font , .font>.data{
     font-family: 'Raleway', sans-serif;
 }
 .margin-0{
@@ -63,6 +64,10 @@ table{
 .margin-top-2{
     margin-top:2em;
 }
+.monitor-panel{
+    overflow: auto;
+}
+
 .panel{
     border-radius: 0px; 
 }
@@ -133,7 +138,7 @@ table{
 
 /* basic positioning */
 .legend { list-style: none; }
-.legend li { float: left; margin-right: 10px; }
+.legend li { float: right; margin-right: 10px; }
 .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
 
 .tooltip-inner {
@@ -147,41 +152,63 @@ table{
     border-right: 5px solid #4BAEB6;
 }
 
-.status{
+.status, .status>.data{
     font-size:13px;
     margin-top:5px;
 }
-.status-online{
+.status-online, .status-online>.data{
     color: #2ecc71;
 }
-.status-warning{
+.status-warning, .status-warning>.data{
     color: #f1c40f;
 }
-.status-offline{
+.status-offline, .status-offline>.data{
     color: #e74c3c;
 }
-.status-unknown{
+.status-unknown, .status-unknown>.data{
     color: #7f8c8d;
+}
+.card:hover{
+    background: rgba(75,174,182,.1);
+    cursor: pointer;
 }
 .icon-card{
     padding-top: 20px;
     color: #7f8c8d;
-}
-.icon-position{
-    bottom: 20px;
-    position: absolute;
-    right: 20px;
-}
-.text-card{
+}   
+.text-card, .text-card>.data{
     color:#4BAEB6;
 }
-.card-position{height: 315px;position: relative;}
-.huge-icon{
-    font-size: 150px;
-    text-align: center;
-    width: 100%;
-    display: inline-block;
+.text-current, .text-current>.data{
+    margin-top:40px;
 }
+.progress{
+    margin-top:40px;
+    border-radius: 10px;
+}
+.progress-bar{
+    background-color:#4BAEB6; 
+    border-radius: 10px;
+}
+.progress-value{
+    position: absolute;
+    right: 0;
+    left: 0;
+    color: black;
+    font-size: 14px;
+}
+
+.clock{
+    font-size: 10px;
+    color: #7f8c8d;
+    }
+
+
+
+
+
+
+
 
 
 /*End Customise*/
@@ -211,7 +238,7 @@ table{
     background-clip: padding-box;
     border: solid transparent;
     border-width: 1px 1px 1px 6px;
-    min-height: 28px;
+    min-height: 16px;
     padding: 100px 0 0;
     box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1), inset 0 -1px 0 rgba(0, 0, 0, .07);
 }
