@@ -169,7 +169,7 @@ table{
     color: #7f8c8d;
 }
 .card:hover{
-    background: rgba(75,174,182,.1);
+    background: #f9f9f9;
     cursor: pointer;
 }
 .icon-card{
@@ -184,6 +184,7 @@ table{
 }
 .progress{
     margin-top:40px;
+    margin-bottom: 0;
     border-radius: 10px;
 }
 .progress-bar{

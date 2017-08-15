@@ -1,5 +1,5 @@
 $('[data-toggle="tooltip"]').tooltip();
-$('#display_Section').hide();
+
 Highcharts.chart('graph', {
 
     title: {
@@ -15,7 +15,6 @@ Highcharts.chart('graph', {
             text: 'Number of Employees'
         }
     },
-
 
     plotOptions: {
         series: {
@@ -35,7 +34,12 @@ Highcharts.chart('graph', {
     }]
 
 });
+
 let main_data = {};
+let elem_body = document.getElementById('table');
+let elem_card = document.querySelectorAll('.data');
+let elem_progress = document.querySelectorAll('.data-storage');
+
 let fetch = {
     api: function () {
         $.ajax({
@@ -47,114 +51,172 @@ let fetch = {
                 "Content-Type": 'application/json; charset=utf-8'
             },
             processData: false
-        }).done(function (response){
+        }).done(function (response) {
             main_data = response.data;
-            model.branch();
+            create.table();
         })
     }
 }
 
-let model = {
-    branch : function(){
-        let branch = {};
-        for(let i in main_data){
-            if(main_data[i] !== undefined && typeof main_data[i] === 'object'){
-                if(main_data[i].tags !== undefined){
-                    for(tag in main_data[i].tags){
-                        if(branch[tag] === undefined){
-                            branch[tag] = [{name : main_data[i].tags[tag] , data : main_data[i],id : i}];
+let view = {
+    clock: function () {
+        let time = moment().format('llll');
+        let delay = new Date().getTime() % 60000;
+        $('#clock').html(time);
+        setTimeout(view.clock, 60000 - delay);
+    },
+    detail: function (row) {
+        let length = row.length;
+        for(let i = 0 ; i<length ;i++){
+            if(typeof row[i] === 'undefined'){
+                elem_card[i].innerHTML = 'N/A';
+            }else{
+                elem_card[i].innerHTML = row[i];
+            }
+        }
+        $('#display_Section').show();
+        $('html, body').animate({scrollTop:$('#display_Section').offset().top-50}, 'slow');
+    },
+    // 1048576
+    memory : function(rom , ram){
+        let rom_free_storage , rom_full_storage , ram_free_storage , ram_full_storage;
+        let percent_rom , percent_ram;
+        let cal = 1073741824;
+        if(typeof rom.free_storage !== 'undefined'){rom_free_storage = (rom.free_storage / cal).toFixed(2)}
+            else{ rom_free_storage = 'N/A'}
+        if(typeof rom.full_storage !== 'undefined'){rom_full_storage = (rom.full_storage / cal).toFixed(2)}
+            else{ rom_full_storage = 'N/A'}
+        if(typeof ram.free_memory !== 'undefined'){ram_free_memory = (ram.free_memory / cal).toFixed(2)}
+            else{ ram_free_memory = 'N/A'}
+        if(typeof ram.full_memory !== 'undefined'){ram_full_memory = (ram.full_memory / cal).toFixed(2)}
+            else{ ram_full_memory = 'N/A'}
+        
+        let rom_used = (rom_full_storage - rom_free_storage).toFixed(2);
+        let ram_used = (ram_full_memory - ram_free_memory).toFixed(2);
+        percent_rom = ((rom_used / rom_full_storage) * 100).toFixed(2);  
+        percent_ram = ((ram_used / ram_full_memory) * 100).toFixed(2); 
 
-                        }else{
-                            branch[tag].push({name : main_data[i].tags[tag] , data : main_data[i],id : i});
+        if(isNaN(percent_rom) || percent_rom < 0){ percent_rom = 'N/A' }
+        if(isNaN(percent_ram) || percent_ram < 0){ percent_ram = 'N/A' }
+        if(isNaN(rom_used) || rom_used < 0){ rom_used = 'N/A' }
+        if(isNaN(ram_used) || ram_used < 0){ ram_used = 'N/A' }
+
+        elem_progress[0].innerHTML = `<h5 class="font"><strong>Storage</strong></h5>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="`+ percent_rom +`"
+                                aria-valuemin="0" aria-valuemax="100" style="width:`+ percent_rom +`%">
+                                    <span class="progress-value">`+ percent_rom +` %</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-left">`+ rom_used +` GB</span>
+                                <span class="pull-right">`+ rom_full_storage +` GB</span>
+                            </div>
+                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>`;
+        elem_progress[1].innerHTML = `<h5 class="font"><strong>Memory</strong></h5>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="`+ percent_ram +`"
+                                aria-valuemin="0" aria-valuemax="100" style="width:`+ percent_ram +`%">
+                                    <span class="progress-value">`+ percent_ram +` %</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-left">`+ ram_used +` GB</span>
+                                <span class="pull-right">`+ ram_full_memory +` GB</span>
+                            </div>
+                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>`;
+    }
+}
+
+let create = {
+
+    table: function () {
+        let arr_table = [];
+        for (let i in main_data) {
+            if (main_data[i] !== undefined && typeof main_data[i] === 'object') {
+                if (main_data[i].tags !== undefined) { // check case undefined tags
+                    for (let tag in main_data[i].tags) { // loop in tags
+
+                        let existTable = arr_table.indexOf(tag);
+                        if (existTable !== -1) { //table already exist
+
+                            create.rowTable(tag, main_data[i], main_data[i].tags[tag]);
+                        } else {
+
+                            let tbody = document.createElement('TBODY');
+                            tbody.id = tag;
+                            create.headTable(tag);
+                            create.rowTable(tag, main_data[i], main_data[i].tags[tag]);
+                            arr_table.push(tag);
                         }
                     }
+
                 }else{
-                    if(branch['n/a'] === undefined){
-                        branch['n/a'] = [{name : 'n/a' , data : main_data[i],id : i}];
-                    }else{
-                        branch['n/a'].push({name : 'n/a' , data : main_data[i],id : i});
+                    let existTable = arr_table.indexOf('N/A');
+                    if (existTable !== -1) { //table already exist
+                        create.rowTable('N/A', main_data[i], 'N/A');
+                    } else {
+
+                        let tbody = document.createElement('TBODY');
+                        tbody.id = 'N/A';
+                        create.headTable('N/A');
+                        create.rowTable('N/A', main_data[i] , 'N/A');
+                        arr_table.push('N/A');
                     }
                 }
             }
         }
-        create.table(model.sortObject(branch));
     },
-    sortObject : function(o) {
-        return Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {});
-    }
-}
-let view = {
-    clock : function(){
-        let time = moment().format('llll');
-        let delay = new Date().getTime()%60000;
-        $('#clock').html(time);
-        setTimeout(view.clock,60000-delay);
-    },
-    detail : function(index , j ){
-        console.log(index);
-        console.log(j);
-    }       
-}  
-                    
+    headTable: function (tag) {
 
-let create = {
-    table : function(branch){
-        console.log(branch);
-        let elem_body = document.getElementById('table');
+        let thead = document.createElement('THEAD');
+        let tbody = document.createElement('TBODY');
+        tbody.id = tag;
+        thead.innerHTML = `<tr class="row-header">
+                                <th>` + tag + `</th>
+                                <th>Device</th>
+                                <th>Battery</th>
+                                <th>Storage</th>
+                                <th>Memory</th>
+                            </tr>`;
+        elem_body.appendChild(thead);
+        elem_body.appendChild(tbody)
+    },
+    rowTable: function (tag, data , name) {
         
-        for(let i in branch){
+        let tbody = document.getElementById(tag);
+        let tr = document.createElement('TR');
 
-            let thead = document.createElement('THEAD');
-            let tbody = document.createElement('TBODY');
-                tbody.id = i; 
+            tr.setAttribute("data-toggle", "tooltip");
+            tr.setAttribute("title", "Click to show more detail");
+            tr.setAttribute("data-placement", "right");
+            tr.addEventListener("click", function(){
+                view.detail([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display]);
+                view.memory(data.rom, data.ram)}); 
 
-                thead.innerHTML = `<tr class="row-header">
-                                        <th>`+ i +`</th>
-                                        <th>Device Status</th>
-                                        <th>Battery Percent</th>
-                                        <th>Battery Temperature</th>
-                                        <th>Storage</th>
-                                        <th>Memory</th>
-                                    </tr>`;
-            elem_body.appendChild(thead);
-                                        
-            for(let j = 0; j < branch[i].length ; j++){
-                    let tr = document.createElement('TR');
+            tr.innerHTML +=
+                `<td>` + name + `</td>
+                    <td><div class="circle ` + create.color(data.application.status_color) + `"></div></td>
+                    <td><div class="circle ` + create.color(data.battery.status_color) + `"></div></td>
+                    <td><div class="circle ` + create.color(data.rom.status_color) + `"></div></td>
+                    <td><div class="circle ` + create.color(data.ram.status_color) + `"></div></td>`;
 
-                        tr.setAttribute("data-toggle", "tooltip");
-                        tr.setAttribute("title", "Click to show more detail");
-                        tr.setAttribute("data-placement", "right");
-                        $('[data-toggle="tooltip"]').tooltip();
-                        tr.addEventListener("click", function(){view.detail(i , branch[i][j].id)}); 
-                        
-                        tr.innerHTML =
-                        `<tr><td>` + branch[i][j].name + `</td>
-                        <td><div class="circle `+ create.color(branch[i][j].data.application.status_color) +`"></div></td>
-                        <td><div class="circle `+ create.color(branch[i][j].data.battery.status_color) +`"></div></td>
-                        <td><div class="circle `+ create.color(branch[i][j].data.battery.health) +`"></div></td>
-                        <td><div class="circle `+ create.color( branch[i][j].data.rom.status_color ) +`"></div></td>
-                        <td><div class="circle `+ create.color( branch[i][j].data.ram.status_color ) +`"></div></td></tr>`;
-                            
-                    
-                tbody.appendChild(tr);
-            }
-            elem_body.appendChild(tbody);
-        }
+        tbody.appendChild(tr);
+        $('[data-toggle="tooltip"]').tooltip();
     },
-    color : function(type){
-        
-        if(type === 'GREEN' || type === 'GOOD'){
+
+    color: function (type) {
+
+        if (type === 'GREEN') {
             return 'circle-online';
-        }else if(type === 'YELLOW'){
+        } else if (type === 'YELLOW') {
             return 'circle-warning';
-        }else if(type === 'RED'){
+        } else if (type === 'RED') {
             return 'circle-offline';
-        }else{
+        } else {
             return 'circle-unknown';
         }
     }
-
-
 }
 
 fetch.api();
