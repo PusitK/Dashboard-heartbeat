@@ -1,4 +1,3 @@
-$('[data-toggle="tooltip"]').tooltip();
 
 Highcharts.chart('graph', {
 
@@ -40,8 +39,12 @@ let elem_body = document.getElementById('table');
 let elem_card = document.querySelectorAll('.data');
 let elem_progress = document.querySelectorAll('.data-storage');
 
+let show_state = 0;
+let collect_detail , collect_rom , collect_ram , collect_id;
+
 let fetch = {
     api: function () {
+        elem_body.innerHTML = '';
         $.ajax({
             crossDomain: true,
             url: "https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/devices",
@@ -53,8 +56,26 @@ let fetch = {
             processData: false
         }).done(function (response) {
             main_data = response.data;
-            create.table();
+            create.table(function(){
+                if(show_state === 1){
+                    collect.data(collect_detail , collect_rom , collect_ram ,collect_id);
+                    let click_elem = document.getElementById(collect_id);
+                        click_elem.click();
+                }
+            });
         })
+        
+        let delay = new Date().getTime() % 60000;        
+        setTimeout(fetch.api, 300000 - delay); //300000 is five minute
+    }
+}
+let collect = {
+
+    data : function (detail , rom ,ram , id){
+
+        collect_id = id;
+        view.detail(detail , id);
+        view.memory(rom , ram);
     }
 }
 
@@ -66,6 +87,9 @@ let view = {
         setTimeout(view.clock, 60000 - delay);
     },
     detail: function (row) {
+
+        show_state = 1; // check state
+        collect_detail = row ;
         let length = row.length;
         for(let i = 0 ; i<length ;i++){
             if(typeof row[i] === 'undefined'){
@@ -79,6 +103,10 @@ let view = {
     },
     // 1048576
     memory : function(rom , ram){
+
+        collect_rom = rom; 
+        collect_ram = ram;
+
         let rom_free_storage , rom_full_storage , ram_free_storage , ram_full_storage;
         let percent_rom , percent_ram;
         let cal = 1073741824;
@@ -101,7 +129,9 @@ let view = {
         if(isNaN(rom_used) || rom_used < 0){ rom_used = 'N/A' }
         if(isNaN(ram_used) || ram_used < 0){ ram_used = 'N/A' }
 
-        elem_progress[0].innerHTML = `<h5 class="font"><strong>Storage</strong></h5>
+        elem_progress[0].innerHTML = `
+                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>
+                            <h5 class="font"><strong>Storage</strong></h5>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="`+ percent_rom +`"
                                 aria-valuemin="0" aria-valuemax="100" style="width:`+ percent_rom +`%">
@@ -111,9 +141,10 @@ let view = {
                             <div>
                                 <span class="text-left">`+ rom_used +` GB</span>
                                 <span class="pull-right">`+ rom_full_storage +` GB</span>
-                            </div>
-                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>`;
-        elem_progress[1].innerHTML = `<h5 class="font"><strong>Memory</strong></h5>
+                            </div>`;
+        elem_progress[1].innerHTML = `
+                            <i class="fa fa-floppy-o icon-card pull-right" aria-hidden="true"></i>
+                            <h5 class="font"><strong>Memory</strong></h5>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="`+ percent_ram +`"
                                 aria-valuemin="0" aria-valuemax="100" style="width:`+ percent_ram +`%">
@@ -123,14 +154,33 @@ let view = {
                             <div>
                                 <span class="text-left">`+ ram_used +` GB</span>
                                 <span class="pull-right">`+ ram_full_memory +` GB</span>
-                            </div>
-                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>`;
+                            </div>`;
+    },
+    toggleDiv : function(idName){
+        
+        let id_elem = document.getElementById(idName);
+        let clpse_elem = document.querySelectorAll('.collapse');
+        let clpse_elem_length = clpse_elem.length;
+
+        for(i = 0 ; i < clpse_elem_length ; i++){
+            if(clpse_elem[i].id !== idName){
+                $(clpse_elem[i]).removeClass("in");
+            }
+        }
+        if(!$( id_elem ).hasClass( "in" )){ // check for animate
+            setTimeout(function(){
+                $('html, body').animate({scrollTop:$(id_elem).offset().top}, 'slow');
+            }, 10);
+        }
     }
 }
-
+  
 let create = {
 
-    table: function () {
+    table: function (callback) {
+        
+        elem_body.innerHTML = ''; // clear table again for make sure
+
         let arr_table = [];
         for (let i in main_data) {
             if (main_data[i] !== undefined && typeof main_data[i] === 'object') {
@@ -140,38 +190,38 @@ let create = {
                         let existTable = arr_table.indexOf(tag);
                         if (existTable !== -1) { //table already exist
 
-                            create.rowTable(tag, main_data[i], main_data[i].tags[tag]);
+                            create.rowTable(tag, main_data[i], main_data[i].tags[tag] , i);
                         } else {
 
                             let tbody = document.createElement('TBODY');
                             tbody.id = tag;
                             create.headTable(tag);
-                            create.rowTable(tag, main_data[i], main_data[i].tags[tag]);
+                            create.rowTable(tag, main_data[i], main_data[i].tags[tag] , i);
                             arr_table.push(tag);
                         }
                     }
-
                 }else{
                     let existTable = arr_table.indexOf('N/A');
                     if (existTable !== -1) { //table already exist
-                        create.rowTable('N/A', main_data[i], 'N/A');
+                        create.rowTable('N/A', main_data[i], 'N/A' , i);
                     } else {
 
                         let tbody = document.createElement('TBODY');
                         tbody.id = 'N/A';
                         create.headTable('N/A');
-                        create.rowTable('N/A', main_data[i] , 'N/A');
+                        create.rowTable('N/A', main_data[i] , 'N/A' , i);
                         arr_table.push('N/A');
                     }
                 }
             }
         }
+        callback();
     },
     headTable: function (tag) {
 
         let thead = document.createElement('THEAD');
         let tbody = document.createElement('TBODY');
-        tbody.id = tag;
+            tbody.id = tag;
         thead.innerHTML = `<tr class="row-header">
                                 <th>` + tag + `</th>
                                 <th>Device</th>
@@ -182,17 +232,16 @@ let create = {
         elem_body.appendChild(thead);
         elem_body.appendChild(tbody)
     },
-    rowTable: function (tag, data , name) {
+    rowTable: function (tag, data , name ,id ) {
         
         let tbody = document.getElementById(tag);
         let tr = document.createElement('TR');
-
+            tr.id = id;
             tr.setAttribute("data-toggle", "tooltip");
             tr.setAttribute("title", "Click to show more detail");
             tr.setAttribute("data-placement", "right");
             tr.addEventListener("click", function(){
-                view.detail([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display]);
-                view.memory(data.rom, data.ram)}); 
+                collect.data([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display],data.rom, data.ram , id)}); 
 
             tr.innerHTML +=
                 `<td>` + name + `</td>
@@ -218,6 +267,7 @@ let create = {
         }
     }
 }
+
 
 fetch.api();
 view.clock();

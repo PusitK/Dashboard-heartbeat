@@ -77,103 +77,173 @@
             <div class="row margin-top-2">
 
                 <div class="col-md-3 col-xs-6">
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default">
+                        <i class="fa fa-tablet icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
+
                             <h5 class="font"><strong>Device Status </strong></h5>
                             <h1 class="font text-card"><span class="data"></span></h1>
-                            <i class="fa fa-tablet icon-card pull-right" aria-hidden="true"></i>
+                            
+                        </div>
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#deviceStatus" 
+                                    onclick="view.toggleDiv('deviceStatus')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-6">
                     
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default">
+                        <i class="fa fa-battery-full icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
                             
                             <h5 class="font"><strong>Battery Percent </strong></h5>
                             <h1 class="font text-card"><span class="data"></span> %</h1>
-                            <i class="fa fa-battery-full icon-card pull-right" aria-hidden="true"></i>
+                           
+                        </div>
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#battPercent" 
+                            onclick="view.toggleDiv('battPercent')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-6">
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default ">
+                        <i class="fa fa-heartbeat icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
+
                             <h5 class="font"><strong>Battery Health </strong></h5>
                             <h1 class="text-card font text-card"><span class="data"></span></h1>
-                            <i class="fa fa-heartbeat icon-card pull-right" aria-hidden="true"></i>
+                            
+                        </div>
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#battHealth"
+                        onclick="view.toggleDiv('battHealth')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-6">
                     
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default">
+                        <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
+
                             <h5 class="font"><strong>Battery Temperature </strong></h5>
                             <h1 class="font text-card"><span class="data"></span> &#x2103;</h1>
-                            <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
+                            
+                        </div>
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#battTemp" onclick="view.toggleDiv('battTemp')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!--COLLAPSE-->
             <div class="row">
-                
+                <div class="col-md-12">
+                    <div class="panel panel-default panel-collapse collapse" id = "deviceStatus">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Device Status Log</strong></h5>
+                        </div>
+                    </div>
+                    <div class="panel panel-default panel-collapse collapse" id = "battPercent">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Battery Percent Log</strong></h5>
+                        </div>
+                    </div>
+                    <div class="panel panel-default panel-collapse collapse" id = "battHealth">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>222</strong></h5>
+                        </div>
+                    </div>
+                    <div class="panel panel-default panel-collapse collapse" id = "battTemp">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>3333</strong></h5>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-4">
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default">
                         <div class="panel-body data-storage">
-                            <!--<h5 class="font"><strong>Storage</strong></h5>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                                    <span class="font progress-value">70%</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-left">123</span>
-                                <span class="pull-right">12321</span>
-                            </div>
-                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>-->
+                            
+                        </div>
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#storage" onclick="view.toggleDiv('storage')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default">
                         <div class="panel-body data-storage">
-                            <!--<h5 class="font"><strong>Memory</strong></h5>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                                    <span class="font progress-value">70%</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-left">123</span>
-                                <span class="pull-right">12321</span>
-                            </div>
-                            <i class="fa fa-floppy-o icon-card pull-right" aria-hidden="true"></i>-->
+                        </div>
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#memory" onclick="view.toggleDiv('memory')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="panel panel-default card">
+                    <div class="panel panel-default card-pagecurrent">
+                        <i class="fa fa-desktop icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
                             <h5 class="font"><strong>Page Current Display</strong></h5>
                             <h1 class="font text-card text-center text-current">
                                 <span class="data"></span>
                             </h1>
-                            <i class="fa fa-desktop icon-card pull-right" aria-hidden="true"></i>
+                            
+                        </div>
+                        <div class="panel-footer card" style="margin-top: 6px;" data-toggle="collapse" data-target="#pageCurrent" 
+                        onclick="view.toggleDiv('pageCurrent')">
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                            <span class="text-info pull-right card-showmore">Show more</span>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
+                
             </div>
+            <!--Collapse Panel-->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default panel-collapse collapse" id = "storage">
                         <div class="panel-body">
                             <h5 class="font"><strong>Status Log</strong></h5>
                             <div id="graph"></div>
                         </div>
                     </div>
+                    <div class="panel panel-default panel-collapse collapse" id = "memory">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Status Log</strong></h5>
+                        </div>
+                    </div>
+                    <div class="panel panel-default panel-collapse collapse" aria-expanded="false" id = "pageCurrent">
+                        <div class="panel-body">
+                            <h5 class="font"><strong>Status Log</strong></h5>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </section>
