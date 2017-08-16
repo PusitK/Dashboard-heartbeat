@@ -39,11 +39,16 @@ let elem_body = document.getElementById('table');
 let elem_card = document.querySelectorAll('.data');
 let elem_progress = document.querySelectorAll('.data-storage');
 
+let clpse_elem = document.querySelectorAll('.collapse');
+let clpse_elem_icon = document.querySelectorAll('.card-showmore-btn');
+
 let show_state = 0;
 let collect_detail , collect_rom , collect_ram , collect_id;
 
 let fetch = {
     api: function () {
+        let time = moment().format('llll');
+          $('#clock').html('Last Update : '+time);
         elem_body.innerHTML = '';
         $.ajax({
             crossDomain: true,
@@ -64,8 +69,9 @@ let fetch = {
                 }
             });
         })
-        
-        let delay = new Date().getTime() % 60000;        
+
+        let delay = new Date().getTime() % 60000;
+
         setTimeout(fetch.api, 300000 - delay); //300000 is five minute
     }
 }
@@ -80,12 +86,7 @@ let collect = {
 }
 
 let view = {
-    clock: function () {
-        let time = moment().format('llll');
-        let delay = new Date().getTime() % 60000;
-        $('#clock').html(time);
-        setTimeout(view.clock, 60000 - delay);
-    },
+
     detail: function (row) {
 
         show_state = 1; // check state
@@ -104,7 +105,7 @@ let view = {
     // 1048576
     memory : function(rom , ram){
 
-        collect_rom = rom; 
+        collect_rom = rom;
         collect_ram = ram;
 
         let rom_free_storage , rom_full_storage , ram_free_storage , ram_full_storage;
@@ -118,11 +119,11 @@ let view = {
             else{ ram_free_memory = 'N/A'}
         if(typeof ram.full_memory !== 'undefined'){ram_full_memory = (ram.full_memory / cal).toFixed(2)}
             else{ ram_full_memory = 'N/A'}
-        
+
         let rom_used = (rom_full_storage - rom_free_storage).toFixed(2);
         let ram_used = (ram_full_memory - ram_free_memory).toFixed(2);
-        percent_rom = ((rom_used / rom_full_storage) * 100).toFixed(2);  
-        percent_ram = ((ram_used / ram_full_memory) * 100).toFixed(2); 
+        percent_rom = ((rom_used / rom_full_storage) * 100).toFixed(2);
+        percent_ram = ((ram_used / ram_full_memory) * 100).toFixed(2);
 
         if(isNaN(percent_rom) || percent_rom < 0){ percent_rom = 'N/A' }
         if(isNaN(percent_ram) || percent_ram < 0){ percent_ram = 'N/A' }
@@ -156,15 +157,19 @@ let view = {
                                 <span class="pull-right">`+ ram_full_memory +` GB</span>
                             </div>`;
     },
+
+
     toggleDiv : function(idName){
-        
+
         let id_elem = document.getElementById(idName);
-        let clpse_elem = document.querySelectorAll('.collapse');
         let clpse_elem_length = clpse_elem.length;
 
         for(i = 0 ; i < clpse_elem_length ; i++){
             if(clpse_elem[i].id !== idName){
+                $(clpse_elem_icon[i]).removeClass("fa-angle-double-down");
                 $(clpse_elem[i]).removeClass("in");
+            }else{
+                $(clpse_elem_icon[i]).addClass("fa-angle-double-down");
             }
         }
         if(!$( id_elem ).hasClass( "in" )){ // check for animate
@@ -174,11 +179,11 @@ let view = {
         }
     }
 }
-  
+
 let create = {
 
     table: function (callback) {
-        
+
         elem_body.innerHTML = ''; // clear table again for make sure
 
         let arr_table = [];
@@ -233,7 +238,7 @@ let create = {
         elem_body.appendChild(tbody)
     },
     rowTable: function (tag, data , name ,id ) {
-        
+
         let tbody = document.getElementById(tag);
         let tr = document.createElement('TR');
             tr.id = id;
@@ -241,7 +246,7 @@ let create = {
             tr.setAttribute("title", "Click to show more detail");
             tr.setAttribute("data-placement", "right");
             tr.addEventListener("click", function(){
-                collect.data([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display],data.rom, data.ram , id)}); 
+                collect.data([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display],data.rom, data.ram , id)});
 
             tr.innerHTML +=
                 `<td>` + name + `</td>
@@ -270,4 +275,3 @@ let create = {
 
 
 fetch.api();
-view.clock();

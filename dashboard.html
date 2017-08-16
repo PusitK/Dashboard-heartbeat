@@ -51,7 +51,7 @@
         <h3 class="font">Dashboard</h3>
         <i id = "clock" class="font clock pull-right"></i>
         <hr>
-        
+
         <div class="row panel panel-default">
             <div class="panel-body monitor-panel">
                 <table class="table" id = "table">
@@ -64,12 +64,12 @@
             <div class="row">
                 <h4 class="font">
                     <span class="data"></span>
-                    <p class="font status">Status : 
+                    <p class="font status">Status :
                         <i class="font status status-online text-center">
                             <span class="data">1</span>
                         </i>
                     </p>
-                    <p class="font status">App Version : 
+                    <p class="font status">App Version :
                         <span class="data">1.0.1</span>
                     </p>
                 </h4>
@@ -83,9 +83,9 @@
 
                             <h5 class="font"><strong>Device Status </strong></h5>
                             <h1 class="font text-card"><span class="data"></span></h1>
-                            
+
                         </div>
-                        <div class="panel-footer card" data-toggle="collapse" data-target="#deviceStatus" 
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#deviceStatus"
                                     onclick="view.toggleDiv('deviceStatus')">
 
                             <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
@@ -95,16 +95,16 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-6">
-                    
+
                     <div class="panel panel-default">
                         <i class="fa fa-battery-full icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
-                            
+
                             <h5 class="font"><strong>Battery Percent </strong></h5>
                             <h1 class="font text-card"><span class="data"></span> %</h1>
-                           
+
                         </div>
-                        <div class="panel-footer card" data-toggle="collapse" data-target="#battPercent" 
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#battPercent"
                             onclick="view.toggleDiv('battPercent')">
 
                             <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
@@ -120,7 +120,7 @@
 
                             <h5 class="font"><strong>Battery Health </strong></h5>
                             <h1 class="text-card font text-card"><span class="data"></span></h1>
-                            
+
                         </div>
                         <div class="panel-footer card" data-toggle="collapse" data-target="#battHealth"
                         onclick="view.toggleDiv('battHealth')">
@@ -132,14 +132,14 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-6">
-                    
+
                     <div class="panel panel-default">
                         <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
                             <h5 class="font"><strong>Battery Temperature </strong></h5>
                             <h1 class="font text-card"><span class="data"></span> &#x2103;</h1>
-                            
+
                         </div>
                         <div class="panel-footer card" data-toggle="collapse" data-target="#battTemp" onclick="view.toggleDiv('battTemp')">
 
@@ -173,7 +173,7 @@
                             <h5 class="font"><strong>3333</strong></h5>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -181,7 +181,7 @@
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-body data-storage">
-                            
+
                         </div>
                         <div class="panel-footer card" data-toggle="collapse" data-target="#storage" onclick="view.toggleDiv('storage')">
 
@@ -211,18 +211,20 @@
                             <h1 class="font text-card text-center text-current">
                                 <span class="data"></span>
                             </h1>
-                            
-                        </div>
-                        <div class="panel-footer card" style="margin-top: 6px;" data-toggle="collapse" data-target="#pageCurrent" 
-                        onclick="view.toggleDiv('pageCurrent')">
 
-                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
+                        </div>
+                        <div class="panel-footer card collapsed" style="margin-top: 6px;" data-toggle="collapse" data-target="#pageCurrent"
+                        onclick="view.toggleDiv('pageCurrent')" aria-expanded="false" >
+
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true" id = "pageCurrent-icon"></i>
+                            <!-- <i class="fa fa-angle-double-down pull-right card-showmore-btn" aria-hidden="true"></i> -->
+
                             <span class="text-info pull-right card-showmore">Show more</span>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
             <!--Collapse Panel-->
             <div class="row">
@@ -238,17 +240,17 @@
                             <h5 class="font"><strong>Status Log</strong></h5>
                         </div>
                     </div>
-                    <div class="panel panel-default panel-collapse collapse" aria-expanded="false" id = "pageCurrent">
+                    <div class="panel panel-default panel-collapse collapse" id = "pageCurrent">
                         <div class="panel-body">
                             <h5 class="font"><strong>Status Log</strong></h5>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </section>
     </div>
-  
+
 </body>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

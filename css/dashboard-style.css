@@ -11,13 +11,13 @@
     src: url("../fonts/ThaiSansNeue-ExtraBold.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
-    
+
 }
 
 body {
     background-color: #f9f9f9;
     margin:0;
-    padding-top: 70px; 
+    padding-top: 70px;
 }
 p,
 h1,
@@ -44,7 +44,7 @@ tr:hover{
     background: #f9f9f9;
 }
 .row-header:hover{
-    background: white ; 
+    background: white ;
 }
 strong{
     color:#4BAEB6;
@@ -72,7 +72,7 @@ table{
 }
 
 .panel{
-    border-radius: 0px; 
+    border-radius: 0px;
 }
 .navstyle{
     background: white;
@@ -81,12 +81,12 @@ table{
     width:100%;
     height: 5px;
     background: #4BAEB6;  /* fallback for old browsers */
-}  
+}
 .navstyle-title {
     font-family: 'ThaiSans';
     color: #777777;
     cursor: pointer;
-    display:inline-block; 
+    display:inline-block;
 
 }
 .navstyle-icon{
@@ -106,12 +106,12 @@ table{
   margin: 5px auto;
 }
 .circle-online{
-    background-color: #2ecc71 ;  
-    animation: animate-online 1.5s infinite ease-out; 
+    background-color: #2ecc71 ;
+    animation: animate-online 1.5s infinite ease-out;
 }
 .circle-warning{
     background-color: #f1c40f ;
-    animation: animate-warning 1.5s infinite ease-out;   
+    animation: animate-warning 1.5s infinite ease-out;
 }
 .circle-offline{
     background-color: #e74c3c;
@@ -122,20 +122,20 @@ table{
     animation: animate-unknown 1.5s infinite ease-out;
 }
 @keyframes animate-online {
-  0% {box-shadow: 0px 0px 0px 0px rgba(26, 188, 156, 1);} 
+  0% {box-shadow: 0px 0px 0px 0px rgba(26, 188, 156, 1);}
   100% {box-shadow: 0px 0px 0px 5px rgba(26, 188, 156, 0.0);}
 }
 @keyframes animate-warning {
-  0% {box-shadow: 0px 0px 0px 0px rgba(241, 196, 15, 1);} 
+  0% {box-shadow: 0px 0px 0px 0px rgba(241, 196, 15, 1);}
   100% {box-shadow: 0px 0px 0px 5px rgba(241, 196, 15, 0.0);}
 }
 @keyframes animate-offline {
-  0% {box-shadow: 0px 0px 0px 0px rgba(231, 76, 60, 1);} 
+  0% {box-shadow: 0px 0px 0px 0px rgba(231, 76, 60, 1);}
   100% {box-shadow: 0px 0px 0px 5px rgba(231, 76, 60, 0.0);}
 }
 
 @keyframes animate-unknown {
-  0% {box-shadow: 0px 0px 0px 0px rgba(127, 140, 141, 1);} 
+  0% {box-shadow: 0px 0px 0px 0px rgba(127, 140, 141, 1);}
   100% {box-shadow: 0px 0px 0px 5px rgba(127, 140, 141, 0.0);}
 }
 
@@ -145,8 +145,8 @@ table{
 .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
 
 .tooltip-inner {
-      background-color: #4BAEB6; 
-      color: #FFFFFF; 
+      background-color: #4BAEB6;
+      color: #FFFFFF;
       font-family: 'Raleway', sans-serif;
       padding: 5px;
       font-size: 12px;
@@ -187,7 +187,7 @@ table{
 }
 .card-showmore{
     margin-top:2px;
-} 
+}
 .card-showmore-btn{
     font-weight: bold;
     margin : 0;
@@ -217,7 +217,7 @@ table{
     border-radius: 10px;
 }
 .progress-bar{
-    background-color:#4BAEB6; 
+    background-color:#4BAEB6;
     border-radius: 10px;
 }
 .progress-value{
@@ -232,8 +232,6 @@ table{
     font-size: 10px;
     color: #7f8c8d;
     }
-
-
 
 
 
