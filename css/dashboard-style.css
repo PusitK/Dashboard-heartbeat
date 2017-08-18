@@ -40,6 +40,9 @@ h1{
 td{
     cursor:pointer;
 }
+td > i{
+    font-size: 10px;
+}
 tr:hover{
     background: #f9f9f9;
 }
@@ -67,12 +70,20 @@ table{
 .margin-top-2{
     margin-top:2em;
 }
+
+.margin-left-2{
+    margin-left:2em;
+}
 .monitor-panel{
     overflow: auto;
 }
 
 .panel{
     border-radius: 0px;
+}
+.panel-footer{
+    border-bottom-right-radius: 0; 
+     border-bottom-left-radius: 0; 
 }
 .navstyle{
     background: white;
@@ -175,8 +186,32 @@ table{
     background: #f9f9f9;
     cursor: pointer;
 }
+.card-active , .collapse{
+    border-bottom: 3px solid #4BAEB6;
+    -webkit-box-shadow: 1px 0px 5px 0px rgba(0,0,0,.3);
+    -moz-box-shadow: 1px 0px 5px 0px rgba(0,0,0,.3);
+    box-shadow: 1px 0px 5px 0px rgba(0,0,0,.3);
+    opacity: 1 !important;
+}
+.card-inactive{
+    opacity: .3;
+}
 .card-pagecurrent{
     height: 184px;
+}
+
+.card-control{
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    display: inline;
+    outline: none;
+
+}
+.card-control-graph{
+    position: absolute;
+    right: 30px;
+    z-index: 1;
 }
 .icon-card{
     margin: 1em;
@@ -234,8 +269,13 @@ table{
     }
 
 
-
-
+/*Responsive Custoin*/
+@media only screen and (max-width: 500px) {
+    .card-control-graph {
+        position: relative;
+        width: 100%;
+    }
+}
 
 
 

@@ -77,11 +77,11 @@
             <div class="row margin-top-2">
 
                 <div class="col-md-3 col-xs-6">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default card-panel">
                         <i class="fa fa-tablet icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
-                            <h5 class="font"><strong>Device Status </strong></h5>
+                            <h5 class="font"><strong>Application Status </strong></h5>
                             <h1 class="font text-card"><span class="data"></span></h1>
 
                         </div>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="col-md-3 col-xs-6">
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-default card-panel">
                         <i class="fa fa-battery-full icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-6">
-                    <div class="panel panel-default ">
+                    <div class="panel panel-default card-panel">
                         <i class="fa fa-heartbeat icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-md-3 col-xs-6">
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-default card-panel">
                         <i class="fa fa-thermometer-full icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
@@ -150,27 +150,105 @@
                     </div>
                 </div>
             </div>
-            <!--COLLAPSE-->
+
+            <!--COLLAPSE Row1-->
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default panel-collapse collapse" id = "deviceStatus">
                         <div class="panel-body">
-                            <h5 class="font"><strong>Device Status Log</strong></h5>
+                            <h5 class="font"><strong>Application Status Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="applicationGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default panel-collapse collapse" id = "battPercent">
                         <div class="panel-body">
                             <h5 class="font"><strong>Battery Percent Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="battPercentGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default panel-collapse collapse" id = "battHealth">
                         <div class="panel-body">
-                            <h5 class="font"><strong>222</strong></h5>
+                            <h5 class="font"><strong>Battery Health Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="battHealthGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default panel-collapse collapse" id = "battTemp">
                         <div class="panel-body">
-                            <h5 class="font"><strong>3333</strong></h5>
+                            <h5 class="font"><strong>Battery Temperature Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="battTempGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -179,7 +257,7 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default card-panel">
                         <div class="panel-body data-storage">
 
                         </div>
@@ -192,7 +270,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default card-panel">
                         <div class="panel-body data-storage">
                         </div>
                         <div class="panel-footer card" data-toggle="collapse" data-target="#memory" onclick="view.toggleDiv('memory')">
@@ -204,7 +282,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="panel panel-default card-pagecurrent">
+                    <div class="panel panel-default card-pagecurrent card-panel">
                         <i class="fa fa-desktop icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
                             <h5 class="font"><strong>Page Current Display</strong></h5>
@@ -217,8 +295,6 @@
                         onclick="view.toggleDiv('pageCurrent')" aria-expanded="false" >
 
                             <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true" id = "pageCurrent-icon"></i>
-                            <!-- <i class="fa fa-angle-double-down pull-right card-showmore-btn" aria-hidden="true"></i> -->
-
                             <span class="text-info pull-right card-showmore">Show more</span>
                             <div class="clearfix"></div>
                         </div>
@@ -231,21 +307,76 @@
                 <div class="col-md-12">
                     <div class="panel panel-default panel-collapse collapse" id = "storage">
                         <div class="panel-body">
-                            <h5 class="font"><strong>Status Log</strong></h5>
-                            <div id="graph"></div>
+                            <h5 class="font"><strong>Storage Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="storageGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default panel-collapse collapse" id = "memory">
                         <div class="panel-body">
-                            <h5 class="font"><strong>Status Log</strong></h5>
+                            <h5 class="font"><strong>Memory Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="memoryGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default panel-collapse collapse" id = "pageCurrent">
                         <div class="panel-body">
-                            <h5 class="font"><strong>Status Log</strong></h5>
+                            <h5 class="font"><strong>Page Current Log</strong></h5>
+                            <hr>
+                            <div class="row margin-top-2">
+                                <div class="pull-right text-right card-control-graph">
+                                    
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select id="type" class="btn font card-control">
+                                        <option value="1hr">1 hr</option>
+                                        <option value="3hr">3 hr</option>
+                                        <option value="6hr">6 hr</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day">1 day</option>
+                                        <option value="1week">1 week</option>
+                                        <option value="2week">2 week</option>
+                                        <option value="1month">1 month</option>
+                                        <option value="2month">2 month</option>
+                                    </select>
+                                </div>
+                                <div id="pageCurrentGraph" class="font" style="height: 400px; min-width: 310px"></div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -256,9 +387,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
-<script src="js/highcharts.js"></script>
+<script src="js/highstock.js"></script>
 <script src="js/moment.min.js"></script>
-<script src="js/script.js"></script>
+<script src="js/dashboard.js"></script>
 
 
 </html>
