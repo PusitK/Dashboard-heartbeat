@@ -196,9 +196,9 @@ table{
 .card-inactive{
     opacity: .3;
 }
-.card-pagecurrent{
+/*.card-pagecurrent{
     height: 184px;
-}
+}*/
 
 .card-control{
     color: #333;

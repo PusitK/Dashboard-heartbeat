@@ -7,158 +7,12 @@
             style: {
                 fontFamily: 'Raleway'
             }
+        },
+        global: {
+            useUTC: false
         }
     });
-    
-    Highcharts.stockChart('battPercentGraph', {
-        chart:{
-             spacingTop: 30,
-             
-        },
-        rangeSelector: {
-           buttonPosition:{
-                y:0,
-            },
-            selected: 1,
-            inputEnabled: false,
-            allButtonsEnabled: true,
-        },
-        yAxis:{
-            min:0,
-            max : 100,
-            opposite:false,
-            showLastLabel: true,
-            plotLines: [{
-                value: 50,
-                width: 1.5,
-                dashStyle: 'dash',
-                color: '#2ABB9B',
-                zIndex:5
-            }],
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            name: 'Percentage',
-            data: [12,31,4,34,25,43,33,100,100,93,92,1],
-            type: 'areaspline',
-            threshold: null,
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            }
-        }]
-    });
-
-    let graph_digit = {
-        chart:{
-             spacingTop: 30,
-             
-        },
-        rangeSelector: {
-           buttonPosition:{
-                y:0,
-            },
-            selected: 1,
-            inputEnabled: false,
-            allButtonsEnabled: true,
-        },
-        yAxis:{
-            opposite:false,
-            min:-1,
-            max:1,
-            tickInterval: 1,
-            showLastLabel: true, // show number1
-            labels: {
-                formatter: function () {
-                    if(this.value === 1){
-                        return 'Active'
-                    }else if(this.value === 0){
-                        return 'Break'
-                    }else{
-                        return 'Background';
-                    }
-                }
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            name: 'AAPL Stock Price',
-            data: [0,1,-1,-1,0,0,1,1,1,1,0,1,-1,1,0,1,0,1,-1],
-            step:true
-        }]
-    };
-
-    let graph = {
-        chart:{
-             spacingTop: 30,
-             
-        },
-        rangeSelector: {
-           buttonPosition:{
-                y:0,
-            },
-            selected: 1,
-            inputEnabled: false,
-            allButtonsEnabled: true,
-        },
-        yAxis:{
-            min:0,
-            showLastLabel: true,
-            opposite:false,
-            plotLines: [{
-                value: 37,
-                width: 1.5,
-                dashStyle: 'dash',
-                color: '#2ABB9B',
-                zIndex:5
-            }],
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            name: 'Temperature',
-            data: [39,31,28,34,25,38,33,38,37,38,38,28],
-            type: 'areaspline',
-            threshold: null,
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            }
-        }]
-    };
-    let dup1 = JSON.parse(JSON.stringify(graph));
-    let dup2 = JSON.parse(JSON.stringify(graph));
-    let dup3 = JSON.parse(JSON.stringify(graph_digit));
-    let dup4 = JSON.parse(JSON.stringify(graph_digit));
-
-    Highcharts.stockChart('battTempGraph', graph);
-    Highcharts.stockChart('storageGraph', dup1);
-    Highcharts.stockChart('memoryGraph', dup2);
-    Highcharts.stockChart('applicationGraph', graph_digit);
-    Highcharts.stockChart('pageCurrentGraph', dup3);
-    Highcharts.stockChart('battHealthGraph', dup4);
-
+    Highcharts.Series.prototype.directTouch = true;
 
     let main_data = {};
     let elem_body = document.getElementById('table');
@@ -169,7 +23,10 @@
     let clpse_elem_active = document.querySelectorAll('.card-panel');
     let clpse_elem_icon = document.querySelectorAll('.card-showmore-btn');
 
+    let period_elem = document.querySelectorAll('.period');
+
     let show_state = 0;
+    let state_toggle = 0;
     let collect_detail, collect_rom, collect_ram, collect_id;
 
     let fetch = {
@@ -200,11 +57,30 @@
             let delay = new Date().getTime() % 60000;
             setTimeout(fetch.api, 300000 - delay); //300000 is five minute
         },
-        graph(id){
-            let enddate = moment().unix() * 1000;
+        graph(obj) {
+            const id = Object.prototype.hasOwnProperty.call(obj, 'id') ? obj.id : collect_id;
+            const type = Object.prototype.hasOwnProperty.call(obj, 'type') ? obj.type : 'all';
+            const range = Object.prototype.hasOwnProperty.call(obj, 'value') ? obj.value : '12hr';
+            const enddate = moment().unix() * 1000;
+            const startdate = get.dateRange(range);
+
+            //remove collapse
+            if (type === 'all') {
+                // set all select to => Day
+                Array.from(period_elem).map((x) => x.selectedIndex = 3);
+
+                let clpse_elem_length = clpse_elem.length;
+                for (let i = 0; i < clpse_elem_length; i++) {
+                    $(clpse_elem_icon[i]).removeClass("fa-angle-double-down");
+                    $(clpse_elem[i]).removeClass("in");
+                    $(clpse_elem_active[i]).removeClass("card-active");
+                }
+            }
+
             $.ajax({
                 crossDomain: true,
-                url: "https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/graph?client_device="+id+'&startdate=0&enddate='+enddate,
+                url: `https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/graph?client_device=` +
+                    id + `&startdate=` + startdate + `&enddate=` + enddate,
                 type: "GET",
                 dataType: 'json',
                 headers: {
@@ -212,19 +88,49 @@
                 },
                 processData: false
             }).done(function (response) {
-                console.log(response);
+                create.graphHub({
+                    data: response.data,
+                    type: type
+                });
             })
         }
     }
+
+    let get = {
+        element(element) {
+            return document.createElement(element);
+        },
+        dateRange(range){
+            //current time
+            let time = moment().unix();
+
+            let rangeIndex = {
+                '1hr' : (time - 3600),
+                '3hr' : (time - (3600 * 3)),
+                '6hr' : (time - (3600 * 6)),
+                '12hr' : (time - (3600 * 12)),
+                '1day' : moment().startOf('day').unix(),
+                '1week' : moment().startOf('day').subtract(6, 'days').unix(),
+                '2week' : moment().startOf('day').subtract(13, 'days').unix(),
+                '1month' : moment().startOf('month').unix(),
+                '2month' : moment().subtract(2, 'month').startOf('month').unix(),
+            };
+            return rangeIndex[range] * 1000;
+        }
+    }
+
     let collect = {
 
-        data: function (detail, rom, ram, id) { // id of element is device id too
+        data: function (detail, rom, ram, id = {}) { // id of element is device id too
 
             collect_id = id;
             view.detail(detail, id);
             view.memory(rom, ram);
-            fetch.graph(id);
-            
+            fetch.graph({
+                type: 'all',
+                id
+            });
+
         }
     }
 
@@ -255,6 +161,7 @@
 
             let rom_free_storage, rom_full_storage, ram_free_memory, ram_full_memory;
             let percent_rom, percent_ram;
+            let rom_used, ram_used;
             let cal = 1073741824;
             if (typeof rom.free_storage !== 'undefined') {
                 rom_free_storage = (rom.free_storage / cal).toFixed(2)
@@ -277,97 +184,93 @@
                 ram_full_memory = 'N/A'
             }
 
-            let rom_used = (rom_full_storage - rom_free_storage).toFixed(2);
-            let ram_used = (ram_full_memory - ram_free_memory).toFixed(2);
+            rom_used = (rom_full_storage - rom_free_storage).toFixed(2);
+            ram_used = (ram_full_memory - ram_free_memory).toFixed(2);
             percent_rom = ((rom_used / rom_full_storage) * 100).toFixed(2);
             percent_ram = ((ram_used / ram_full_memory) * 100).toFixed(2);
 
-            if (isNaN(percent_rom) || percent_rom < 0) {
-                percent_rom = 'N/A'
-            }
-            if (isNaN(percent_ram) || percent_ram < 0) {
-                percent_ram = 'N/A'
-            }
-            if (isNaN(rom_used) || rom_used < 0) {
-                rom_used = 'N/A'
-            }
-            if (isNaN(ram_used) || ram_used < 0) {
-                ram_used = 'N/A'
-            }
+            if (isNaN(percent_rom) || percent_rom < 0) percent_rom = 'N/A'
+            if (isNaN(percent_ram) || percent_ram < 0) percent_ram = 'N/A'
+            if (isNaN(rom_used) || rom_used < 0) rom_used = 'N/A'
+            if (isNaN(ram_used) || ram_used < 0) ram_used = 'N/A'
 
             elem_progress[0].innerHTML = `
                             <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>
                             <h5 class="font"><strong>Storage</strong></h5>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="` + percent_rom + `"
-                                aria-valuemin="0" aria-valuemax="100" style="width:` + percent_rom + `%">
-                                    <span class="progress-value">` + percent_rom + ` %</span>
+                                <div class="progress-bar" role="progressbar" aria-valuenow=" ${percent_rom} "
+                                aria-valuemin="0" aria-valuemax="100" style="width: ${percent_rom}%">
+                                    <span class="progress-value"> ${percent_rom} %</span>
                                 </div>
                             </div>
                             <div>
-                                <span class="text-left">` + rom_used + ` GB</span>
-                                <span class="pull-right">` + rom_full_storage + ` GB</span>
+                                <span class="text-left"> ${rom_used} GB</span>
+                                <span class="pull-right"> ${rom_full_storage} GB</span>
                             </div>`;
             elem_progress[1].innerHTML = `
                             <i class="fa fa-floppy-o icon-card pull-right" aria-hidden="true"></i>
                             <h5 class="font"><strong>Memory</strong></h5>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="` + percent_ram + `"
-                                aria-valuemin="0" aria-valuemax="100" style="width:` + percent_ram + `%">
-                                    <span class="progress-value">` + percent_ram + ` %</span>
+                                <div class="progress-bar" role="progressbar" aria-valuenow=" ${percent_ram} "
+                                aria-valuemin="0" aria-valuemax="100" style="width: ${percent_ram}%">
+                                    <span class="progress-value"> ${percent_ram} %</span>
                                 </div>
                             </div>
                             <div>
-                                <span class="text-left">` + ram_used + ` GB</span>
-                                <span class="pull-right">` + ram_full_memory + ` GB</span>
+                                <span class="text-left"> ${ram_used} GB</span>
+                                <span class="pull-right"> ${ram_full_memory} GB</span>
                             </div>`;
         },
-
-
-        toggleDiv: function (idName) {
+        toggleDiv(idName) {
 
             let id_elem = document.getElementById(idName);
             let clpse_elem_length = clpse_elem.length;
-
             for (let i = 0; i < clpse_elem_length; i++) {
+
                 if (clpse_elem[i].id !== idName) {
                     $(clpse_elem_icon[i]).removeClass("fa-angle-double-down");
                     $(clpse_elem[i]).removeClass("in");
-                    // $(clpse_elem_active[i]).toggleClass("card-inactive");
+
+                    $(clpse_elem_active[i]).removeClass("card-active");
+
                 } else {
+                    $(clpse_elem_active[i]).toggleClass("card-active");
                     $(clpse_elem_icon[i]).toggleClass("fa-angle-double-down");
                 }
             }
-
             if (!$(id_elem).hasClass("in")) { // check for animate
                 setTimeout(function () {
                     $('html, body').animate({
-                        scrollTop: $(id_elem).offset().top - 50
+                        scrollTop: $(id_elem).offset().top - 110
                     }, 'slow');
-                }, 10);
+                }, 0);
             }
         }
     }
 
     let create = {
-
-        table: function (callback) {
-
-            elem_body.innerHTML = ''; // clear table again for make sure
+        
+        table(callback) {
+            // clear table again for make sure
+            elem_body.innerHTML = '';
 
             let arr_table = [];
             for (let i in main_data) {
                 if (main_data[i] !== undefined && typeof main_data[i] === 'object') {
-                    if (main_data[i].tags !== undefined) { // check case undefined tags
-                        for (let tag in main_data[i].tags) { // loop in tags
+                    // check case undefined tags
+                    if (main_data[i].tags !== undefined) {
+
+                        // loop in tags
+                        for (let tag in main_data[i].tags) {
 
                             let existTable = arr_table.indexOf(tag);
-                            if (existTable !== -1) { //table already exist
+                            //table already exist
+                            if (existTable !== -1) {
 
                                 create.rowTable(tag, main_data[i], main_data[i].tags[tag], i);
                             } else {
 
-                                let tbody = document.createElement('TBODY');
+                                let tbody = get.element('TBODY');
                                 tbody.id = tag;
                                 create.headTable(tag);
                                 create.rowTable(tag, main_data[i], main_data[i].tags[tag], i);
@@ -376,11 +279,13 @@
                         }
                     } else {
                         let existTable = arr_table.indexOf('N/A');
-                        if (existTable !== -1) { //table already exist
+                        //table already exist
+                        if (existTable !== -1) {
                             create.rowTable('N/A', main_data[i], 'N/A', i);
+
                         } else {
 
-                            let tbody = document.createElement('TBODY');
+                            let tbody = get.element('TBODY');
                             tbody.id = 'N/A';
                             create.headTable('N/A');
                             create.rowTable('N/A', main_data[i], 'N/A', i);
@@ -393,11 +298,11 @@
         },
         headTable: function (tag) {
 
-            let thead = document.createElement('THEAD');
-            let tbody = document.createElement('TBODY');
+            let thead = get.element('THEAD');
+            let tbody = get.element('TBODY');
             tbody.id = tag;
             thead.innerHTML = `<tr class="row-header">
-                                <th>` + tag + `</th>
+                                <th> ${tag} </th>
                                 <th>Application</th>
                                 <th>Battery</th>
                                 <th>Storage</th>
@@ -407,10 +312,10 @@
             elem_body.appendChild(thead);
             elem_body.appendChild(tbody)
         },
-        rowTable: function (tag, data, name, id) {
+        rowTable(tag, data, name, id = {}) {
 
-            let last_modify = moment.unix(data.timestamp/1000).format('llll');
-            if(last_modify === 'Invalid date'){
+            let last_modify = moment.unix(data.timestamp / 1000).format('llll');
+            if (last_modify === 'Invalid date') {
                 last_modify = '-';
             }
             let tbody = document.getElementById(tag);
@@ -424,18 +329,18 @@
             });
 
             tr.innerHTML +=
-                `<td>` + name + `</td>
+                `<td> ${name} </td>
                     <td><div class="circle ` + create.color(data.application.status_color) + `"></div></td>
                     <td><div class="circle ` + create.color(data.battery.status_color) + `"></div></td>
                     <td><div class="circle ` + create.color(data.rom.status_color) + `"></div></td>
                     <td><div class="circle ` + create.color(data.ram.status_color) + `"></div></td>
-                    <td><i>` + last_modify + `</i></td>`;
+                    <td><i> ${last_modify} </i></td>`;
 
             tbody.appendChild(tr);
             $('[data-toggle="tooltip"]').tooltip();
         },
 
-        color: function (type) {
+        color(type = {}) {
 
             if (type === 'GREEN') {
                 return 'circle-online';
@@ -446,6 +351,717 @@
             } else {
                 return 'circle-unknown';
             }
+        },
+        graphHub(data = {}) {
+
+            const type = Object.prototype.hasOwnProperty.call(data, 'type') ? data.type : 'all';
+            const data_graph = Object.prototype.hasOwnProperty.call(data, 'data') ? data.data : {};
+            if (type === 'all') {
+                
+                create.graphAppStatus(data_graph);
+                create.graphbattPercent(data_graph);
+                create.graphbattHealth(data_graph);
+                create.graphbattTemp(data_graph);
+                create.graphStorage(data_graph);
+                create.graphMemory(data_graph);
+                create.graphPageCurrent(data_graph);
+
+            } else if (type === 'appStatus') create.graphAppStatus(data_graph);
+              else if (type === 'battPercent') create.graphbattPercent(data_graph);
+              else if (type === 'battHealth') create.graphbattHealth(data_graph);
+              else if (type === 'battTemp') create.graphbattTemp(data_graph);
+              else if (type === 'storage') create.graphStorage(data_graph);
+              else if (type === 'memory') create.graphMemory(data_graph);
+              else if (type === 'pageCurrent') create.graphPageCurrent(data_graph);
+        },
+        graphAppStatus(data_graph) {
+
+            const data = data_graph.map((x) => {
+                if (x.application.status === 'READY') {
+                    return [x.timestamp, 1];
+                } else if (x.application.status === 'BREAK') {
+                    return [x.timestamp, 0];
+                } else {
+                    return [x.timestamp, -1];
+                }
+            });
+       
+            Highcharts.stockChart('applicationGraph', {
+                chart: {
+                    spacingTop: 30,
+
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+
+                },
+                yAxis: {
+                    opposite: false,
+                    min: -1,
+                    max: 1,
+                    tickInterval: 1,
+                    showLastLabel: true, // show number1
+                    labels: {
+                        formatter: function () {
+                            if (this.value === 1) {
+                                return 'Ready'
+                            } else if (this.value === 0) {
+                                return 'Break'
+                            } else {
+                                return 'Background';
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        if (this.y === 1) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Ready</b>';
+                        } else if (this.y === 0) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Break</b>';
+                        } else {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Background</b>';
+                        }
+                        
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    data: data.sort(),
+                    step: true
+                }]
+            });
+        },
+        graphbattPercent(data_graph){
+
+            const battPercentData = data_graph.map((x) => [x.timestamp , x.battery.percent]);
+            Highcharts.stockChart('battPercentGraph', {
+                chart: {
+                    spacingTop: 30,
+
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    opposite: false,
+                    showLastLabel: true,
+                    plotLines: [{
+                        value: 50,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Percentage',
+                    data: battPercentData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            });
+        },
+        graphbattHealth(data_graph){
+
+            const battHealthData = data_graph.map((x) => {
+                if (x.battery.health === 'GOOD') {
+                    return [x.timestamp, 0];
+                } else if (x.battery.health === 'COLD') {
+                    return [x.timestamp, -1];
+                } else if (x.battery.health === 'OVER_HEAT') {
+                    return [x.timestamp, 1];
+                } else{
+                    return [x.timestamp, null];
+                }
+            });
+            Highcharts.stockChart('battHealthGraph', {
+                chart: {
+                    spacingTop: 30,
+
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    opposite: false,
+                    min: -1,
+                    max: 1,
+                    tickInterval: 1,
+                    showLastLabel: true, // show number1
+                    labels: {
+                        
+                        formatter: function () {
+                            if (this.value === 0) {
+                                return 'GOOD'
+                            } else if (this.value === 1) {
+                                return 'Over Heat'
+                            } else if (this.value === -1){
+                                return 'Cold';
+                            } else{
+                                return 'Dead';
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        if (this.y === 1) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Over Heat</b>';
+                        } else if (this.y === 0) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : GOOD</b>';
+                        } else if(this.y === -1){
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Cold</b>';
+                        }else{
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : DEAD</b>';
+                        }
+                        
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    data: battHealthData.sort(),
+                    step: true
+                }]
+            });
+        },
+        graphbattTemp(data_graph){
+
+            const battTempData = data_graph.map((x) => [x.timestamp , x.battery.temperature]);
+            Highcharts.stockChart('battTempGraph', {
+                chart: {
+                    spacingTop: 30,
+
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    min: 0,
+                    showLastLabel: true,
+                    opposite: false,
+                    plotLines: [{
+                        value: 37,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Temperature',
+                    data: battTempData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            });
+        },
+        graphStorage(data_graph){
+            const storageData = data_graph.map((x) => {
+                let storage_used = (x.rom.full_storage - x.rom.free_storage);
+
+                if(isNaN(storage_used) || storage_used < 0){
+
+                    return [ x.timestamp, null]
+                }else{
+                    let value = (storage_used / 1073741824).toFixed(2);
+
+                    return [ x.timestamp, Number(value)];
+                }
+            });
+
+            Highcharts.stockChart('storageGraph', {
+                chart: {
+                    spacingTop: 30,
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    
+                    min: 0,
+                    showLastLabel: true,
+                    opposite: false,
+                    plotLines: [{
+                        value: 37,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                    labels:{
+                        format: '{value} GB',
+                    }
+                    
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Storage Used',
+                    data: storageData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            });
+        },
+        graphMemory(data_graph){
+
+            const memoryData = data_graph.map((x) => {
+                let memory_used = (x.ram.full_memory - x.ram.free_memory);
+
+                if(isNaN(memory_used) || memory_used < 0){
+
+                    return [ x.timestamp, null]
+                }else{
+                    let value = (memory_used / 1073741824).toFixed(2);
+
+                    return [ x.timestamp, Number(value)];
+                }
+            });
+            Highcharts.stockChart('memoryGraph', {
+                chart: {
+                    spacingTop: 30,
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    
+                    min: 0,
+                    showLastLabel: true,
+                    opposite: false,
+                    plotLines: [{
+                        value: 37,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                    labels:{
+                        format: '{value} GB',
+                    }
+                    
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Storage Used',
+                    data: memoryData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            });
+
+        },
+        graphPageCurrent(data_graph){
+            
+            const pageCurrentData = data_graph.map((x) => {
+
+                if (x.application.page_display === 'Q1') {
+                    return [x.timestamp, 5];
+                } else if (x.application.page_display === 'THANK_YOU') {
+                    return [x.timestamp, 4];
+                } else if (x.application.page_display === 'WAITING') {
+                    return [x.timestamp, 3];
+                } else if (x.application.page_display === 'LOGIN') {
+                    return [x.timestamp, 2];
+                }else if (x.application.page_display === 'BREAK') {
+                    return [x.timestamp, 1];
+                }else if (x.application.page_display === 'CLOSED') {
+                    return [x.timestamp, 0];
+                }else{
+                    return [x.timestamp, null];
+                }
+            });
+            Highcharts.stockChart('pageCurrentGraph', {
+                chart: {
+                    spacingTop: 30,
+
+                },
+                rangeSelector: {
+                    enabled : true,
+                    buttonPosition: {
+                        y: 0,
+                    },
+                    selected: 4,
+                    inputEnabled: false,
+                    allButtonsEnabled: true,
+                    buttonTheme: {
+                        width: 50
+                    },
+                    buttons: [{
+                        type: 'minute',
+                        count: 5,
+                        text: '5mins'
+                    }, {
+                        type: 'minute',
+                        count: 15,
+                        text: '15mins'
+                    }, {
+                        type: 'hour',
+                        count: 1,
+                        text: '1hour'
+                    }, {
+                        type: 'day',
+                        count: 1,
+                        text: '1day'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                    moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    opposite: false,
+                    min: 0,
+                    max: 5,
+                    tickInterval: 1,
+                    showLastLabel: true, // show number1
+                    labels: {
+                        formatter: function () {
+                            if (this.value === 5) {
+                                return 'Q1' }
+                            else if (this.value === 4){ return 'Thank You' }
+                            else if (this.value === 3){ return 'Waiting' }
+                            else if (this.value === 2){ return 'Login' }
+                            else if (this.value === 1){ return 'Break'}
+                            else { return 'Closed' };
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        if (this.y === 5) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Q1</b>';
+                        } else if (this.y === 4) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Thank You</b>';
+                        } else if(this.y === 3){
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Waiting</b>';
+                        } else if(this.y === 2){
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Login</b>';
+                        }else if(this.y === 1){
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Break</b>';
+                        }else {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Closed</b>';
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    data: pageCurrentData.sort(),
+                    step: true
+                }]
+            });
         }
     }
 
