@@ -10,6 +10,6 @@
   "author": "Bright",
   "license": "ISC",
   "scripts": {
-    "babel": "babel --presets es2015 js/script.js -o src/script.js"
+    "babel": "babel --presets es2015 js/dashboard.js -o src/dashboard.js"
   }
 }

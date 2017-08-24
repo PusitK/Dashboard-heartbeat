@@ -15,13 +15,14 @@
     <!--CSS-->
 
     <link rel='stylesheet' href='css/bootstrap.min.css' />
+    <link rel='stylesheet' href='css/bright-awesome.css' />
     <link rel='stylesheet' href='css/dashboard-style.css' />
     <link rel='stylesheet' href='css/font-awesome.min.css' />
     <link rel='stylesheet' href='css/highcharts.css' />
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 
     <style>
-        #display_Section{
+        #display_Section {
             display: none;
         }
     </style>
@@ -32,32 +33,48 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     <!-- The above form looks like this -->
+
     <nav class="navbar navbar-default navbar-fixed-top navstyle">
         <div class="navstyle-colorBar"></div>
         <div class="container-fluid">
-            <div class="container-fluid">
+            <div class="navbar-header">
                 <h1 class="navstyle-title" onClick="location.reload(true);">Report</h1>
-                <span class="dropdown pull-right">
+            </div>
+            <ul class="nav navbar-nav nav-menu">
+                <li ><a href="/index.html">
+                    <i class="bi bi-form-report nav-menu-icon" aria-hidden="true"></i>
+                    <span class="font nav-menu-text">Form Report</span>
+                    </a>
+                </li>
+                <li  class="active">
+                    <a href="/dashboard.html">
+                        <i class="fa fa-tablet nav-menu-icon" aria-hidden="true"></i>
+                        <span class="font nav-menu-text">Device Status</span>
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+
+            <span class="dropdown pull-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-caret-down navstyle-icon" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="#">Log Out</a></li>
+                        <li><a onclick="logout()">Log Out</a></li>
                     </ul>
                 </span>
-            </div>
         </div>
     </nav>
     <div class="container">
         <div class="row">
-        <h3 class="font">Dashboard</h3>
-        <i id = "clock" class="font clock pull-right"></i>
-        <hr>
+            <h3 class="font">Dashboard</h3>
+            <i id="clock" class="font clock pull-right"></i>
+            <hr>
 
-        <div class="row panel panel-default">
-            <div class="panel-body monitor-panel">
-                <table class="table" id = "table">
-                </table>
+            <div class="row panel panel-default">
+                <div class="panel-body monitor-panel">
+                    <table class="table" id="table">
+                    </table>
+                </div>
             </div>
-        </div>
         </div>
         <hr>
         <section id="display_Section">
@@ -85,8 +102,7 @@
                             <h1 class="font text-card"><span class="data"></span></h1>
 
                         </div>
-                        <div class="panel-footer card" data-toggle="collapse" data-target="#deviceStatus"
-                                    onclick="view.toggleDiv('deviceStatus')">
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#deviceStatus" onclick="view.toggleDiv('deviceStatus')">
 
                             <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
                             <span class="text-info pull-right card-showmore">Show more</span>
@@ -104,8 +120,7 @@
                             <h1 class="font text-card"><span class="data"></span> %</h1>
 
                         </div>
-                        <div class="panel-footer card" data-toggle="collapse" data-target="#battPercent"
-                            onclick="view.toggleDiv('battPercent')">
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#battPercent" onclick="view.toggleDiv('battPercent')">
 
                             <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
                             <span class="text-info pull-right card-showmore">Show more</span>
@@ -122,8 +137,7 @@
                             <h1 class="text-card font text-card"><span class="data"></span></h1>
 
                         </div>
-                        <div class="panel-footer card" data-toggle="collapse" data-target="#battHealth"
-                        onclick="view.toggleDiv('battHealth')">
+                        <div class="panel-footer card" data-toggle="collapse" data-target="#battHealth" onclick="view.toggleDiv('battHealth')">
 
                             <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true"></i>
                             <span class="text-info pull-right card-showmore">Show more</span>
@@ -155,16 +169,25 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-default panel-collapse collapse" id = "deviceStatus">
+                    <div class="panel panel-default panel-collapse collapse" id="deviceStatus">
                         <div class="panel-body">
                             <h5 class="font"><strong>Application Status Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
-                                    
-                                    <h6 class="font card-control">Duration :</h6>
+                            <div class="row ">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
                                     <select class="btn font card-control period" 
-                                            onchange="fetch.graph({type : 'appStatus' , value : value});">
+                                        onchange="view.redrawChart({type : 'appStatus' , value : value});">
+
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+                                <div class="text-right card-control-graph-right">
+                                    <h6 class="font card-control">Duration :</h6>
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'appStatus' , value : value});">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
@@ -180,16 +203,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default panel-collapse collapse" id = "battPercent">
+                    <div class="panel panel-default panel-collapse collapse" id="battPercent">
                         <div class="panel-body">
                             <h5 class="font"><strong>Battery Percent Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
+                            <div class="row">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
+                                    <select class="btn font card-control period">
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+                                <div class="text-right card-control-graph-right">
                                     
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period"
-                                            onchange="fetch.graph({type : 'battPercent' , value : value});">
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'battPercent' , value : value});">
 
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
@@ -206,16 +237,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default panel-collapse collapse" id = "battHealth">
+                    <div class="panel panel-default panel-collapse collapse" id="battHealth">
                         <div class="panel-body">
                             <h5 class="font"><strong>Battery Health Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
-                                    
+                            <div class="row">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
+                                    <select class="btn font card-control period">
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+
+                                <div class="text-right card-control-graph-right">
+
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period"
-                                        onchange="fetch.graph({type : 'battHealth' , value : value});">
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'battHealth' , value : value});">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
@@ -231,16 +271,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default panel-collapse collapse" id = "battTemp">
+                    <div class="panel panel-default panel-collapse collapse" id="battTemp">
                         <div class="panel-body">
                             <h5 class="font"><strong>Battery Temperature Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
-                                    
+                            <div class="row">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
+                                    <select class="btn font card-control period">
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+
+                                <div class="text-right card-control-graph-right">
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period"
-                                            onchange="fetch.graph({type : 'battTemp' , value : value});">
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'battTemp' , value : value});">
 
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
@@ -297,10 +345,10 @@
                             </h1>
 
                         </div>
-                        <div class="panel-footer card collapsed" style="margin-top: 6px;" data-toggle="collapse" data-target="#pageCurrent"
-                        onclick="view.toggleDiv('pageCurrent')" aria-expanded="false" >
+                        <div class="panel-footer card collapsed" style="margin-top: 6px;" data-toggle="collapse" data-target="#pageCurrent" onclick="view.toggleDiv('pageCurrent')"
+                            aria-expanded="false">
 
-                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true" id = "pageCurrent-icon"></i>
+                            <i class="fa fa-angle-double-right pull-right card-showmore-btn" aria-hidden="true" id="pageCurrent-icon"></i>
                             <span class="text-info pull-right card-showmore">Show more</span>
                             <div class="clearfix"></div>
                         </div>
@@ -311,16 +359,24 @@
             <!--Collapse Panel-->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-default panel-collapse collapse" id = "storage">
+                    <div class="panel panel-default panel-collapse collapse" id="storage">
                         <div class="panel-body">
                             <h5 class="font"><strong>Storage Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
-                                    
+                            <div class="row">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
+                                    <select class="btn font card-control period">
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+                                <div class="text-right card-control-graph-right">
+
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period"
-                                            onchange="fetch.graph({type : 'storage' , value : value});">
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'storage' , value : value});">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
@@ -336,16 +392,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default panel-collapse collapse" id = "memory">
+                    <div class="panel panel-default panel-collapse collapse" id="memory">
                         <div class="panel-body">
                             <h5 class="font"><strong>Memory Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
-                                    
+                            <div class="row">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
+                                    <select class="btn font card-control period">
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+                                <div class="text-right card-control-graph-right">
+
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period"
-                                            onchange="fetch.graph({type : 'memory' , value : value});">
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'memory' , value : value});">
 
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
@@ -362,16 +426,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default panel-collapse collapse" id = "pageCurrent">
+                    <div class="panel panel-default panel-collapse collapse" id="pageCurrent">
                         <div class="panel-body">
                             <h5 class="font"><strong>Page Current Log</strong></h5>
                             <hr>
-                            <div class="row margin-top-2">
-                                <div class="pull-right text-right card-control-graph">
-                                    
+                            <div class="row">
+                                <div class="text-left card-control-graph-left">
+                                    <h6 class="font card-control">Frequency :</h6>
+                                    <select class="btn font card-control period">
+                                        <option value="5min">5 mins</option>
+                                        <option value="15min">15 mins</option>
+                                        <option value="1hr">1 hour</option>
+                                        <option value="1day" selected> 1 day </option>
+                                    </select>
+                                </div>
+                                <div class="text-right card-control-graph-right">
+
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period"
-                                            onchange="fetch.graph({type : 'pageCurrent' , value : value});">
+                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'pageCurrent' , value : value});">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>

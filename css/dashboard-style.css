@@ -71,6 +71,9 @@ table{
     margin-top:2em;
 }
 
+.margin-left-1{
+    margin-left:1em;
+}
 .margin-left-2{
     margin-left:2em;
 }
@@ -104,6 +107,23 @@ table{
     font-size:30px !important;
     margin-top:5px;
     color:#777777 !important;
+}
+.nav-menu{
+    margin-left:3em;
+}
+.nav-menu-icon{
+    position: relative;
+    font-size: 30px !important;
+    float: left;
+    top: -6px;
+    margin-right: .5em;
+}
+.active > a > .nav-menu-icon{
+    font-size: 33px !important;
+}
+.active > a , .active > a > i , .active > a > span{
+    color:#4BAEB6 !important;
+    font-weight: bold;
 }
 
 
@@ -208,7 +228,13 @@ table{
     outline: none;
 
 }
-.card-control-graph{
+.card-control-graph-left{
+    position: absolute;
+    left: 30px;
+    z-index: 1;
+}
+
+.card-control-graph-right{
     position: absolute;
     right: 30px;
     z-index: 1;
@@ -357,3 +383,39 @@ table{
     -o-transition: 0.5s;
     font-weight: bold;
 }
+
+/*Responsive menu navbar*/
+@media only screen and (max-width: 768px) {
+    .navbar-header{
+        float: left;
+        margin-left: 0;
+        padding-left: 15px;
+    }
+    .nav>li {
+        display: inline-block !important;
+        margin:0;
+    }   
+    .nav-menu {
+         float: left;
+         margin: 0; 
+        margin-left:3em;
+    }
+    .navbar-nav>li>a {
+        padding-bottom: 12px;
+    }
+}
+@media only screen and (max-width: 468px) {
+    .nav-menu {
+         height:34px;
+    }
+    .nav-menu-text{
+        display: none;
+    }
+    .nav-menu-icon{
+        margin:0;
+    }
+    .navbar-nav>li>a {
+        padding-bottom: 34px;
+    }
+}
+
