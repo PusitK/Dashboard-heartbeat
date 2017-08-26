@@ -13,456 +13,8 @@
         }
     });
     Highcharts.Series.prototype.directTouch = true;
-    //  Chart variable
 
-    let application_chart = {
-        chart: {
-            spacingTop: 55,
-        },
-        rangeSelector: {
-            enabled: false,
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        xAxis: {
-            tickInterval: 24 * 3600 * 1000,
-            labels: {
-                enabled: true,
-                formatter: function () {
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
 
-        },
-        yAxis: {
-            opposite: false,
-            min: -1,
-            max: 1,
-            tickInterval: 1,
-            showLastLabel: true, // show number1
-            labels: {
-                formatter: function () {
-                    if (this.value === 1) {
-                        return 'Ready'
-                    } else if (this.value === 0) {
-                        return 'Break'
-                    } else {
-                        return 'Background';
-                    }
-                }
-            }
-        },
-        tooltip: {
-            formatter: function () {
-                if (this.y === 1) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Ready</b>';
-                } else if (this.y === 0) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Break</b>';
-                } else {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Background</b>';
-                }
-
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            data: '',
-            step: true
-        }]
-    };
-    let battPercent_chart = {
-        chart: {
-            spacingTop: 55,
-
-        },
-        rangeSelector: {
-            enabled: false,
-        },
-        xAxis: {
-            labels: {
-                enabled: true,
-                formatter: function () {
-
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
-
-        },
-        yAxis: {
-            min: 0,
-            max: 100,
-            opposite: false,
-            showLastLabel: true,
-            plotLines: [{
-                value: 50,
-                width: 1.5,
-                dashStyle: 'dash',
-                color: '#2ABB9B',
-                zIndex: 5
-            }],
-        },
-        credits: {
-            enabled: false
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        series: [{
-            name: 'Percentage',
-            // data: battPercentData.sort(),
-            type: 'areaspline',
-            threshold: null,
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            }
-        }]
-    };
-    let battHealth_chart = {
-        chart: {
-            spacingTop: 55,
-
-        },
-        rangeSelector: {
-            enabled: false,
-        },
-        xAxis: {
-            labels: {
-                enabled: true,
-                formatter: function () {
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
-        },
-        yAxis: {
-            opposite: false,
-            min: -1,
-            max: 1,
-            tickInterval: 1,
-            showLastLabel: true, // show number1
-            labels: {
-
-                formatter: function () {
-                    if (this.value === 0) {
-                        return 'GOOD'
-                    } else if (this.value === 1) {
-                        return 'Over Heat'
-                    } else if (this.value === -1) {
-                        return 'Cold';
-                    } else {
-                        return 'Dead';
-                    }
-                }
-            }
-        },
-        tooltip: {
-            formatter: function () {
-                if (this.y === 1) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Over Heat</b>';
-                } else if (this.y === 0) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : GOOD</b>';
-                } else if (this.y === -1) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Cold</b>';
-                } else {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : DEAD</b>';
-                }
-
-            }
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            // data: battHealthData.sort(),
-            step: true
-        }]
-    }
-    let battTemp_chart = {
-        chart: {
-            spacingTop: 55,
-
-        },
-        rangeSelector: {
-            enabled: false,
-        },
-        xAxis: {
-            labels: {
-                enabled: true,
-                formatter: function () {
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
-        },
-        yAxis: {
-            min: 0,
-            showLastLabel: true,
-            opposite: false,
-            plotLines: [{
-                value: 37,
-                width: 1.5,
-                dashStyle: 'dash',
-                color: '#2ABB9B',
-                zIndex: 5
-            }],
-        },
-        credits: {
-            enabled: false
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        series: [{
-            name: 'Temperature',
-            // data: battTempData.sort(),
-            type: 'areaspline',
-            threshold: null,
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            }
-        }]
-    }
-    let storage_chart = {
-        chart: {
-            spacingTop: 55,
-        },
-        rangeSelector: {
-            enabled: false,
-        },
-        xAxis: {
-            labels: {
-                enabled: true,
-                formatter: function () {
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
-        },
-        yAxis: {
-
-            min: 0,
-            showLastLabel: true,
-            opposite: false,
-            plotLines: [{
-                value: 37,
-                width: 1.5,
-                dashStyle: 'dash',
-                color: '#2ABB9B',
-                zIndex: 5
-            }],
-            labels: {
-                format: '{value} GB',
-            }
-
-        },
-        credits: {
-            enabled: false
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        series: [{
-            name: 'Storage Used',
-            // data: storageData.sort(),
-            type: 'areaspline',
-            threshold: null,
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            }
-        }]
-    }
-    let memory_chart = {
-        chart: {
-            spacingTop: 55,
-        },
-        rangeSelector: {
-            enabled: false,
-
-        },
-        xAxis: {
-            labels: {
-                enabled: true,
-                formatter: function () {
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
-        },
-        yAxis: {
-
-            min: 0,
-            showLastLabel: true,
-            opposite: false,
-            plotLines: [{
-                value: 37,
-                width: 1.5,
-                dashStyle: 'dash',
-                color: '#2ABB9B',
-                zIndex: 5
-            }],
-            labels: {
-                format: '{value} GB',
-            }
-
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            name: 'Storage Used',
-            // data: memoryData.sort(),
-            type: 'areaspline',
-            threshold: null,
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            }
-        }]
-    }
-    let pageCurrent_chart = {
-        chart: {
-            spacingTop: 55,
-
-        },
-        rangeSelector: {
-            enabled: false,
-        },
-        xAxis: {
-            labels: {
-                enabled: true,
-                formatter: function () {
-                    return moment.unix(this.value / 1000).format('L') + '<br/>' +
-                        moment.unix(this.value / 1000).format('LT');
-                }
-            },
-            type: 'datetime',
-        },
-        yAxis: {
-            opposite: false,
-            min: 0,
-            max: 5,
-            tickInterval: 1,
-            showLastLabel: true, // show number1
-            labels: {
-                formatter: function () {
-                    if (this.value === 5) {
-                        return 'Q1'
-                    } else if (this.value === 4) {
-                        return 'Thank You'
-                    } else if (this.value === 3) {
-                        return 'Waiting'
-                    } else if (this.value === 2) {
-                        return 'Login'
-                    } else if (this.value === 1) {
-                        return 'Break'
-                    } else {
-                        return 'Closed'
-                    };
-                }
-            }
-        },
-        scrollbar: {
-            enabled: false
-        },
-        navigator: {
-            enabled: false
-        },
-        tooltip: {
-            formatter: function () {
-                if (this.y === 5) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Q1</b>';
-                } else if (this.y === 4) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Thank You</b>';
-                } else if (this.y === 3) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Waiting</b>';
-                } else if (this.y === 2) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Login</b>';
-                } else if (this.y === 1) {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Break</b>';
-                } else {
-                    return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Closed</b>';
-                }
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            // data: pageCurrentData.sort(),
-            step: true
-        }]
-    }
-    // end chart variable
     let main_data = {};
     let elem_body = document.getElementById('table');
     let elem_card = document.querySelectorAll('.data');
@@ -481,7 +33,7 @@
     let frequency_index = {
         '5min': 300000,
         '15min': 900000,
-        '1hour': 3600000,
+        '1hr': 3600 * 1000,
         '1day': 24 * 3600 * 6000
     }
 
@@ -490,7 +42,7 @@
     if (typeof localStorage.business === 'undefined') {
         window.location = "http://survey-report.dev.triple3.io";
     } else {
-        business = localStorage.business;
+        business = '?business=' + localStorage.business;
     }
 
     let fetch = {
@@ -500,7 +52,7 @@
             elem_body.innerHTML = '';
             $.ajax({
                 crossDomain: true,
-                url: "https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/devices?business=" + business,
+                url: "https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/devices" + business,
                 type: "GET",
                 dataType: 'json',
                 headers: {
@@ -527,7 +79,6 @@
             const range = Object.prototype.hasOwnProperty.call(obj, 'value') ? obj.value : '12hr';
             const enddate = moment().unix() * 1000;
             const startdate = get.dateRange(range);
-
             //remove collapse
             // if (type === 'all') {
             //     // set all select to => Day
@@ -540,7 +91,6 @@
             //         $(clpse_elem_active[i]).removeClass("card-active");
             //     }
             // }
-
             $.ajax({
                 crossDomain: true,
                 url: `https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/graph?client_device=` +
@@ -711,8 +261,11 @@
             // objFreq.type == type of graph to re render , objFreq.value = value of freq select val.
             const Chart_type = Object.prototype.hasOwnProperty.call(objFreq, 'type') ? objFreq.type : 'all';
             const freq = Object.prototype.hasOwnProperty.call(objFreq, 'value') ? objFreq.value : {};
-
-
+            
+            // if (Chart_type === 'appStatus') {
+            //     application_chart.xAxis.tickInterval = frequency_index[freq];
+            //     Highcharts.stockChart('applicationGraph', JSON.parse(JSON.stringify(application_chart)));
+            // }
         }
     }
 
@@ -771,7 +324,16 @@
             let thead = create.element('THEAD');
             let tbody = create.element('TBODY');
             tbody.id = tag;
-            thead.innerHTML = `<tr class="row-header">
+            if (tag === 'N/A') {
+                thead.innerHTML = ` <tr class="row-header">
+                                    <th class="status-offline"> Inactive </th><th></th><th></th><th></th><th></th><th></th>
+                                    </tr>`;
+            } else {
+                thead.innerHTML = ` <tr class="row-header">
+                                    <th class="status-online"> Active </th><th></th><th></th><th></th><th></th><th></th>
+                                    </tr>`;
+            }
+            thead.innerHTML += `<tr class="row-header">
                                 <th> ${tag} </th>
                                 <th>Application</th>
                                 <th>Battery</th>
@@ -779,6 +341,7 @@
                                 <th>Memory</th>
                                 <th>Last Update</th>
                             </tr>`;
+
             elem_body.appendChild(thead);
             elem_body.appendChild(tbody)
         },
@@ -855,18 +418,145 @@
                     return [x.timestamp, -1];
                 }
             });
-
-                application_chart.series[0].data = data.sort();
-                Highcharts.stockChart('applicationGraph', JSON.parse(JSON.stringify(application_chart)));
+            let application_chart = {
+                chart: {
+                    spacingTop: 55,
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                },
+                yAxis: {
+                    opposite: false,
+                    min: -1,
+                    max: 1,
+                    tickInterval: 1,
+                    showLastLabel: true, // show number1
+                    labels: {
+                        formatter: function () {
+                            if (this.value === 1) {
+                                return 'Ready'
+                            } else if (this.value === 0) {
+                                return 'Break'
+                            } else {
+                                return 'Background';
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        if (this.y === 1) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Ready</b>';
+                        } else if (this.y === 0) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Break</b>';
+                        } else {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Background</b>';
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    data: data.sort(),
+                    step: true
+                }]
+            };
+            Highcharts.stockChart('applicationGraph', application_chart);
 
         },
         graphbattPercent(data_graph) {
 
             const battPercentData = data_graph.map((x) => [x.timestamp, x.battery.percent]);
-            battPercent_chart.series[0].data = battPercentData.sort();
-            Highcharts.stockChart('battPercentGraph', JSON.parse(JSON.stringify(battPercent_chart)));
-        },
+            let battPercent_chart = {
+                chart: {
+                    spacingTop: 55,
 
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                xAxis: {
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    opposite: false,
+                    showLastLabel: true,
+                    plotLines: [{
+                        value: 50,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                },
+                credits: {
+                    enabled: false
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                series: [{
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    name: 'Percentage',
+                    data: battPercentData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            };
+            Highcharts.stockChart('battPercentGraph', battPercent_chart);
+        },
         graphbattHealth(data_graph) {
             const battHealthData = data_graph.map((x) => {
                 if (x.battery.health === 'GOOD') {
@@ -879,15 +569,148 @@
                     return [x.timestamp, null];
                 }
             });
-            battHealth_chart.series[0].data = battHealthData.sort();
-            Highcharts.stockChart('battHealthGraph', JSON.parse(JSON.stringify(battHealth_chart)));
+
+            let battHealth_chart = {
+                chart: {
+                    spacingTop: 55,
+
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                xAxis: {
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    opposite: false,
+                    min: -1,
+                    max: 1,
+                    tickInterval: 1,
+                    showLastLabel: true, // show number1
+                    labels: {
+
+                        formatter: function () {
+                            if (this.value === 0) {
+                                return 'GOOD'
+                            } else if (this.value === 1) {
+                                return 'Over Heat'
+                            } else if (this.value === -1) {
+                                return 'Cold';
+                            } else {
+                                return 'Dead';
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        if (this.y === 1) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Over Heat</b>';
+                        } else if (this.y === 0) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : GOOD</b>';
+                        } else if (this.y === -1) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Cold</b>';
+                        } else {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : DEAD</b>';
+                        }
+                    }
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    data: battHealthData.sort(),
+                    step: true
+                }]
+            }
+            Highcharts.stockChart('battHealthGraph', battHealth_chart);
         },
         graphbattTemp(data_graph) {
 
             const battTempData = data_graph.map((x) => [x.timestamp, x.battery.temperature]);
-            battTemp_chart.series[0].data = battTempData.sort();
 
-            Highcharts.stockChart('battTempGraph', JSON.parse(JSON.stringify(battTemp_chart)));
+            let battTemp_chart = {
+                chart: {
+                    spacingTop: 55,
+
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                xAxis: {
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    min: 0,
+                    showLastLabel: true,
+                    opposite: false,
+                    plotLines: [{
+                        value: 37,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                },
+                credits: {
+                    enabled: false
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Temperature',
+                    data: battTempData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            }
+            Highcharts.stockChart('battTempGraph', battTemp_chart);
         },
         graphStorage(data_graph) {
             const storageData = data_graph.map((x) => {
@@ -903,8 +726,73 @@
                 }
             });
 
-            storage_chart.series[0].data = storageData.sort();
-            Highcharts.stockChart('storageGraph', JSON.parse(JSON.stringify(storageGraph)));
+            let storage_chart = {
+                chart: {
+                    spacingTop: 55,
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                xAxis: {
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+
+                    min: 0,
+                    showLastLabel: true,
+                    opposite: false,
+                    plotLines: [{
+                        value: 37,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                    labels: {
+                        format: '{value} GB',
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Storage Used',
+                    data: storageData.sort(),
+                    type: 'areaspline',
+                    threshold: null,
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            }
+            Highcharts.stockChart('storageGraph', storage_chart);
         },
         graphMemory(data_graph) {
 
@@ -921,8 +809,76 @@
                 }
             });
 
-            memory_chart.series[0].data = memoryData.sort();
-            Highcharts.stockChart('memoryGraph', JSON.parse(JSON.stringify(memory_chart)));
+
+            let memory_chart = {
+                chart: {
+                    spacingTop: 55,
+                },
+                rangeSelector: {
+                    enabled: false,
+
+                },
+                xAxis: {
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+
+                    min: 0,
+                    showLastLabel: true,
+                    opposite: false,
+                    plotLines: [{
+                        value: 37,
+                        width: 1.5,
+                        dashStyle: 'dash',
+                        color: '#2ABB9B',
+                        zIndex: 5
+                    }],
+                    labels: {
+                        format: '{value} GB',
+                    }
+
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Storage Used',
+                    data: memoryData.sort(),
+                    type: 'areaspline',
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    threshold: null,
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                }]
+            }
+            Highcharts.stockChart('memoryGraph', memory_chart);
 
         },
         graphPageCurrent(data_graph) {
@@ -945,9 +901,85 @@
                     return [x.timestamp, null];
                 }
             });
+            let pageCurrent_chart = {
+                chart: {
+                    spacingTop: 55,
 
-            pageCurrent_chart.series[0].data = pageCurrentData.sort();
-            Highcharts.stockChart('pageCurrentGraph', JSON.parse(JSON.stringify(pageCurrent_chart)));
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                xAxis: {
+                    tickInterval: 24 * 3600 * 1000,
+                    labels: {
+                        enabled: true,
+                        formatter: function () {
+                            return moment.unix(this.value / 1000).format('L') + '<br/>' +
+                                moment.unix(this.value / 1000).format('LT');
+                        }
+                    },
+                    type: 'datetime',
+                },
+                yAxis: {
+                    opposite: false,
+                    min: 0,
+                    max: 5,
+                    tickInterval: 1,
+                    showLastLabel: true, // show number1
+                    labels: {
+                        formatter: function () {
+                            if (this.value === 5) {
+                                return 'Q1'
+                            } else if (this.value === 4) {
+                                return 'Thank You'
+                            } else if (this.value === 3) {
+                                return 'Waiting'
+                            } else if (this.value === 2) {
+                                return 'Login'
+                            } else if (this.value === 1) {
+                                return 'Break'
+                            } else {
+                                return 'Closed'
+                            };
+                        }
+                    }
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                navigator: {
+                    enabled: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        if (this.y === 5) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Q1</b>';
+                        } else if (this.y === 4) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Thank You</b>';
+                        } else if (this.y === 3) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Waiting</b>';
+                        } else if (this.y === 2) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Login</b>';
+                        } else if (this.y === 1) {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Break</b>';
+                        } else {
+                            return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Closed</b>';
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    marker: {
+                        enabled: true,
+                        radius: 2
+                    },
+                    data: pageCurrentData.sort(),
+                    step: true
+                }]
+            }
+            Highcharts.stockChart('pageCurrentGraph', pageCurrent_chart);
         }
     }
 
