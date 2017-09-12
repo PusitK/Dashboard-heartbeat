@@ -56,3 +56,21 @@
 .bi-eee:before {
   content: "\66";
 }
+.bi-macintosh:before {
+  content: "\67";
+}
+.bi-battery-power:before {
+  content: "\68";
+}
+.bi-tachometer:before {
+  content: "\69";
+}
+.bi-plug:before {
+  content: "\6a";
+}
+.bi-meter:before {
+  content: "\6b";
+}
+.bi-battery:before {
+  content: "\6c";
+}

@@ -27,14 +27,15 @@
     let period_elem = document.querySelectorAll('.period');
 
     let show_state = 0;
-    let state_toggle = 0;
     let collect_detail, collect_rom, collect_ram, collect_id;
+
+    sessionStorage.currentGraphDisplay = 'all';
 
     let frequency_index = {
         '5min': 300000,
         '15min': 900000,
         '1hr': 3600 * 1000,
-        '1day': 24 * 3600 * 6000
+        '1day': 24 * 3600 * 1000
     }
 
     let business = '';
@@ -74,23 +75,18 @@
             setTimeout(fetch.api, 300000 - delay); //300000 is five minute
         },
         graph(obj) {
+      
             const id = Object.prototype.hasOwnProperty.call(obj, 'id') ? obj.id : collect_id;
             const type = Object.prototype.hasOwnProperty.call(obj, 'type') ? obj.type : 'all';
-            const range = Object.prototype.hasOwnProperty.call(obj, 'value') ? obj.value : '12hr';
+            let range = Object.prototype.hasOwnProperty.call(obj, 'range') ? obj.range : '1day';
+            let freq = Object.prototype.hasOwnProperty.call(obj, 'freq') ? obj.freq : '1day';
+
+            if (range === null) range = '1day';
+            if (freq === null) freq = '1day';
+
             const enddate = moment().unix() * 1000;
             const startdate = get.dateRange(range);
-            //remove collapse
-            // if (type === 'all') {
-            //     // set all select to => Day
-            //     Array.from(period_elem).map((x) => x.selectedIndex = 3);
 
-            //     let clpse_elem_length = clpse_elem.length;
-            //     for (let i = 0; i < clpse_elem_length; i++) {
-            //         $(clpse_elem_icon[i]).removeClass("fa-angle-double-down");
-            //         $(clpse_elem[i]).removeClass("in");
-            //         $(clpse_elem_active[i]).removeClass("card-active");
-            //     }
-            // }
             $.ajax({
                 crossDomain: true,
                 url: `https://a0n3yz3jbj.execute-api.ap-southeast-1.amazonaws.com/prod/hb/graph?client_device=` +
@@ -102,9 +98,11 @@
                 },
                 processData: false
             }).done(function (response) {
+
                 create.graphHub({
                     data: response.data,
-                    type: type
+                    type: type,
+                    freq : frequency_index[freq]
                 });
             })
         }
@@ -133,15 +131,37 @@
 
     let collect = {
 
-        data: function (detail, rom, ram, id = {}) { // id of element is device id too
-
+        //collect when click row in table
+        data: function (detail, rom, ram, id = {} , last_modify) { // id of element is device id too
             collect_id = id;
             view.detail(detail, id);
             view.memory(rom, ram);
+            document.getElementById('lastModify').innerHTML = last_modify;
+            collect.currentGraphDisplay();
+        },
+        
+        currentGraphDisplay(chart_name , select_state){
+            
+            let elem_dulation , elem_freq;
+            let chart = chart_name ? chart_name : sessionStorage.currentGraphDisplay;
+           
+            if(chart === sessionStorage.currentGraphDisplay && select_state !== 1){
+                sessionStorage.currentGraphDisplay = 'all';
+                elem_freq = null;
+                elem_dulation = null;
+            }else {
+                sessionStorage.currentGraphDisplay = chart;
+                elem_freq = document.querySelector('#'+chart+'Freq').value; //get freq of id
+                elem_dulation = document.querySelector('#'+chart+'Dulation').value; //get freq of dulation
+            }
+
             fetch.graph({
-                type: 'all',
-                id
+                type : sessionStorage.currentGraphDisplay ,
+                range : elem_dulation , 
+                freq : elem_freq
             });
+
+          
         }
     }
 
@@ -206,7 +226,6 @@
             if (isNaN(ram_used) || ram_used < 0) ram_used = 'N/A'
 
             elem_progress[0].innerHTML = `
-                            <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>
                             <h5 class="font"><strong>Storage</strong></h5>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow=" ${percent_rom} "
@@ -219,7 +238,6 @@
                                 <span class="pull-right"> ${rom_full_storage} GB</span>
                             </div>`;
             elem_progress[1].innerHTML = `
-                            <i class="fa fa-floppy-o icon-card pull-right" aria-hidden="true"></i>
                             <h5 class="font"><strong>Memory</strong></h5>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow=" ${percent_ram} "
@@ -233,6 +251,9 @@
                             </div>`;
         },
         toggleDiv(idName) {
+            
+            //get current graph for keep in session
+            collect.currentGraphDisplay(idName);
 
             let id_elem = document.getElementById(idName);
             let clpse_elem_length = clpse_elem.length;
@@ -257,16 +278,6 @@
                 }, 0);
             }
         },
-        redrawChart(objFreq = {}) {
-            // objFreq.type == type of graph to re render , objFreq.value = value of freq select val.
-            const Chart_type = Object.prototype.hasOwnProperty.call(objFreq, 'type') ? objFreq.type : 'all';
-            const freq = Object.prototype.hasOwnProperty.call(objFreq, 'value') ? objFreq.value : {};
-            
-            // if (Chart_type === 'appStatus') {
-            //     application_chart.xAxis.tickInterval = frequency_index[freq];
-            //     Highcharts.stockChart('applicationGraph', JSON.parse(JSON.stringify(application_chart)));
-            // }
-        }
     }
 
     let create = {
@@ -358,7 +369,7 @@
             tr.setAttribute("title", "Click to show more detail");
             tr.setAttribute("data-placement", "right");
             tr.addEventListener("click", function () {
-                collect.data([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display], data.rom, data.ram, id)
+                collect.data([name, data.application.status, data.app_version, data.application.status, data.battery.percent, data.battery.health, data.battery.temperature, data.application.page_display], data.rom, data.ram, id , last_modify)
             });
 
             tr.innerHTML +=
@@ -389,26 +400,27 @@
 
             const type = Object.prototype.hasOwnProperty.call(data, 'type') ? data.type : 'all';
             const data_graph = Object.prototype.hasOwnProperty.call(data, 'data') ? data.data : {};
+            const freq = Object.prototype.hasOwnProperty.call(data, 'freq') ? data.freq : frequency_index['1day'];
+
             if (type === 'all') {
 
-                create.graphAppStatus(data_graph);
-                create.graphbattPercent(data_graph);
-                create.graphbattHealth(data_graph);
-                create.graphbattTemp(data_graph);
-                create.graphStorage(data_graph);
-                create.graphMemory(data_graph);
-                create.graphPageCurrent(data_graph);
+                create.graphAppStatus(data_graph , freq);
+                create.graphbattPercent(data_graph , freq);
+                create.graphbattHealth(data_graph , freq);
+                create.graphbattTemp(data_graph , freq);
+                create.graphStorage(data_graph , freq);
+                create.graphMemory(data_graph , freq);
+                create.graphPageCurrent(data_graph , freq);
 
-            } else if (type === 'appStatus') create.graphAppStatus(data_graph);
-            else if (type === 'battPercent') create.graphbattPercent(data_graph);
-            else if (type === 'battHealth') create.graphbattHealth(data_graph);
-            else if (type === 'battTemp') create.graphbattTemp(data_graph);
-            else if (type === 'storage') create.graphStorage(data_graph);
-            else if (type === 'memory') create.graphMemory(data_graph);
-            else if (type === 'pageCurrent') create.graphPageCurrent(data_graph);
+            } else if (type === 'deviceStatus') create.graphAppStatus(data_graph , freq);
+            else if (type === 'battPercent') create.graphbattPercent(data_graph , freq);
+            else if (type === 'battHealth') create.graphbattHealth(data_graph , freq);
+            else if (type === 'battTemp') create.graphbattTemp(data_graph , freq);
+            else if (type === 'storage') create.graphStorage(data_graph , freq);
+            else if (type === 'memory') create.graphMemory(data_graph , freq);
+            else if (type === 'pageCurrent') create.graphPageCurrent(data_graph , freq);
         },
-        graphAppStatus(data_graph) {
-
+        graphAppStatus(data_graph ,freq) {
             const data = data_graph.map((x) => {
                 if (x.application.status === 'READY') {
                     return [x.timestamp, 1];
@@ -419,9 +431,7 @@
                 }
             });
             let application_chart = {
-                chart: {
-                    spacingTop: 55,
-                },
+              
                 rangeSelector: {
                     enabled: false,
                 },
@@ -433,15 +443,19 @@
                 },
                 xAxis: {
                     type: 'datetime',
-                    tickInterval: 24 * 3600 * 1000,
+                    tickInterval: freq,
+                    minTickInterval: freq,
+                    
                     labels: {
                         enabled: true,
                         formatter: function () {
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation: -45
                     },
                 },
+               
                 yAxis: {
                     opposite: false,
                     min: -1,
@@ -479,35 +493,35 @@
                         enabled: true,
                         radius: 2
                     },
+                    step: true,
                     data: data.sort(),
-                    step: true
+                    pointInterval: 3600 * 1000,
+                    pointStart: Date.UTC(2006, 0, 01, 0, 0, 0, 0),
                 }]
             };
             Highcharts.stockChart('applicationGraph', application_chart);
 
         },
-        graphbattPercent(data_graph) {
-
+        graphbattPercent(data_graph ,freq) {
             const battPercentData = data_graph.map((x) => [x.timestamp, x.battery.percent]);
             let battPercent_chart = {
-                chart: {
-                    spacingTop: 55,
-
-                },
+             
                 rangeSelector: {
                     enabled: false,
                 },
                 xAxis: {
-                    tickInterval: 24 * 3600 * 1000,
+                    type: 'datetime',
+                    tickInterval: freq,
+                    minTickInterval: freq,
                     labels: {
                         enabled: true,
                         formatter: function () {
 
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation: -45
                     },
-                    type: 'datetime',
 
                 },
                 yAxis: {
@@ -539,8 +553,8 @@
                     },
                     name: 'Percentage',
                     data: battPercentData.sort(),
+                    step: true,
                     type: 'areaspline',
-                    threshold: null,
                     fillColor: {
                         linearGradient: {
                             x1: 0,
@@ -557,7 +571,7 @@
             };
             Highcharts.stockChart('battPercentGraph', battPercent_chart);
         },
-        graphbattHealth(data_graph) {
+        graphbattHealth(data_graph ,freq) {
             const battHealthData = data_graph.map((x) => {
                 if (x.battery.health === 'GOOD') {
                     return [x.timestamp, 0];
@@ -571,23 +585,23 @@
             });
 
             let battHealth_chart = {
-                chart: {
-                    spacingTop: 55,
-
-                },
+                
                 rangeSelector: {
                     enabled: false,
                 },
                 xAxis: {
-                    tickInterval: 24 * 3600 * 1000,
+                    type: 'datetime',
+                    tickInterval: freq,
+                    minTickInterval: freq,
                     labels: {
                         enabled: true,
                         formatter: function () {
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation : -45
                     },
-                    type: 'datetime',
+                    
                 },
                 yAxis: {
                     opposite: false,
@@ -610,7 +624,7 @@
                         }
                     }
                 },
-                tooltip: {
+                tooltip : {
                     formatter: function () {
                         if (this.y === 1) {
                             return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Status : Over Heat</b>';
@@ -643,28 +657,28 @@
             }
             Highcharts.stockChart('battHealthGraph', battHealth_chart);
         },
-        graphbattTemp(data_graph) {
+        graphbattTemp(data_graph ,freq) {
 
             const battTempData = data_graph.map((x) => [x.timestamp, x.battery.temperature]);
 
             let battTemp_chart = {
-                chart: {
-                    spacingTop: 55,
-
-                },
+                
                 rangeSelector: {
                     enabled: false,
                 },
                 xAxis: {
-                    tickInterval: 24 * 3600 * 1000,
+                    type: 'datetime',
+                    tickInterval: freq,
+                    minTickInterval: freq,
                     labels: {
                         enabled: true,
                         formatter: function () {
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation : -45
                     },
-                    type: 'datetime',
+                    
                 },
                 yAxis: {
                     min: 0,
@@ -689,6 +703,7 @@
                 },
                 series: [{
                     name: 'Temperature',
+                    step: true,
                     data: battTempData.sort(),
                     type: 'areaspline',
                     threshold: null,
@@ -712,7 +727,7 @@
             }
             Highcharts.stockChart('battTempGraph', battTemp_chart);
         },
-        graphStorage(data_graph) {
+        graphStorage(data_graph ,freq) {
             const storageData = data_graph.map((x) => {
                 let storage_used = (x.rom.full_storage - x.rom.free_storage);
 
@@ -727,22 +742,22 @@
             });
 
             let storage_chart = {
-                chart: {
-                    spacingTop: 55,
-                },
+            
                 rangeSelector: {
                     enabled: false,
                 },
                 xAxis: {
-                    tickInterval: 24 * 3600 * 1000,
+                    type: 'datetime',
+                    tickInterval: freq,
+                    minTickInterval: freq,
                     labels: {
                         enabled: true,
                         formatter: function () {
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation : -45
                     },
-                    type: 'datetime',
                 },
                 yAxis: {
 
@@ -771,6 +786,7 @@
                 },
                 series: [{
                     name: 'Storage Used',
+                    step:true,
                     data: storageData.sort(),
                     type: 'areaspline',
                     threshold: null,
@@ -794,7 +810,7 @@
             }
             Highcharts.stockChart('storageGraph', storage_chart);
         },
-        graphMemory(data_graph) {
+        graphMemory(data_graph ,freq) {
 
             const memoryData = data_graph.map((x) => {
                 let memory_used = (x.ram.full_memory - x.ram.free_memory);
@@ -811,23 +827,23 @@
 
 
             let memory_chart = {
-                chart: {
-                    spacingTop: 55,
-                },
+               
                 rangeSelector: {
                     enabled: false,
 
                 },
                 xAxis: {
-                    tickInterval: 24 * 3600 * 1000,
+                    type: 'datetime',
+                    tickInterval: freq,
+                    minTickInterval: freq,
                     labels: {
                         enabled: true,
                         formatter: function () {
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation : -45
                     },
-                    type: 'datetime',
                 },
                 yAxis: {
 
@@ -857,6 +873,7 @@
                 },
                 series: [{
                     name: 'Storage Used',
+                    step : true,
                     data: memoryData.sort(),
                     type: 'areaspline',
                     marker: {
@@ -881,7 +898,7 @@
             Highcharts.stockChart('memoryGraph', memory_chart);
 
         },
-        graphPageCurrent(data_graph) {
+        graphPageCurrent(data_graph ,freq) {
 
             const pageCurrentData = data_graph.map((x) => {
 
@@ -902,21 +919,21 @@
                 }
             });
             let pageCurrent_chart = {
-                chart: {
-                    spacingTop: 55,
-
-                },
+               
                 rangeSelector: {
                     enabled: false,
                 },
                 xAxis: {
-                    tickInterval: 24 * 3600 * 1000,
+                    type: 'datetime',
+                    tickInterval: freq,
+                    minTickInterval: freq,
                     labels: {
                         enabled: true,
                         formatter: function () {
                             return moment.unix(this.value / 1000).format('L') + '<br/>' +
                                 moment.unix(this.value / 1000).format('LT');
-                        }
+                        },
+                        rotation : -45
                     },
                     type: 'datetime',
                 },
@@ -951,6 +968,7 @@
                     enabled: false
                 },
                 tooltip: {
+                    
                     formatter: function () {
                         if (this.y === 5) {
                             return '<p>Date : ' + moment.unix(this.x / 1000).format('llll') + '</p><br/><b>Display : Q1</b>';
@@ -975,6 +993,7 @@
                         enabled: true,
                         radius: 2
                     },
+                    step:true,
                     data: pageCurrentData.sort(),
                     step: true
                 }]
@@ -988,4 +1007,9 @@
         localStorage.clear();
         window.location = "http://survey-report.dev.triple3.io";
     }
+
     fetch.api();
+    let delay = new Date().getTime() % 60000;
+    setTimeout(function(){
+        collect.currentGraphDisplay();    
+    }, 300000 - delay); //300000 is five minute

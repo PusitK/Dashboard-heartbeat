@@ -88,6 +88,7 @@ table{
     border-bottom-right-radius: 0; 
      border-bottom-left-radius: 0; 
 }
+
 .navstyle{
     background: white;
 }
@@ -212,6 +213,10 @@ table{
     -moz-box-shadow: 1px 0px 5px 0px rgba(0,0,0,.3);
     box-shadow: 1px 0px 5px 0px rgba(0,0,0,.3);
     opacity: 1 !important;
+   
+}
+.collapse{
+     height: 520px;
 }
 .card-inactive{
     opacity: .3;
@@ -229,15 +234,15 @@ table{
 
 }
 .card-control-graph-left{
-    position: absolute;
-    left: 30px;
-    z-index: 1;
+    float: right;
+    margin-bottom: .3em;
+    margin-right:1em;
 }
 
 .card-control-graph-right{
-    position: absolute;
-    right: 30px;
-    z-index: 1;
+    float: right;
+    margin-bottom: .3em;
+    margin-right:1em;
 }
 .icon-card{
     margin: 1em;
@@ -294,6 +299,9 @@ table{
     color: #7f8c8d;
     }
 
+.blackdrop{
+    
+}
 
 /*Responsive Custoin*/
 @media only screen and (max-width: 500px) {

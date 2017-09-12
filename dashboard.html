@@ -80,6 +80,7 @@
         <section id="display_Section">
             <div class="row">
                 <h4 class="font">
+                    <span class="font pull-right clock">Last Update : <span class="font clock" id = "lastModify"></span></span>
                     <span class="data"></span>
                     <p class="font status">Status :
                         <i class="font status status-online text-center">
@@ -90,12 +91,13 @@
                         <span class="data">1.0.1</span>
                     </p>
                 </h4>
+                
             </div>
             <div class="row margin-top-2">
 
                 <div class="col-md-3 col-xs-6">
                     <div class="panel panel-default card-panel">
-                        <i class="fa fa-tablet icon-card pull-right" aria-hidden="true"></i>
+                        <i class="bi bi-meter icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
                             <h5 class="font"><strong>Application Status </strong></h5>
@@ -113,7 +115,7 @@
                 <div class="col-md-3 col-xs-6">
 
                     <div class="panel panel-default card-panel">
-                        <i class="fa fa-battery-full icon-card pull-right" aria-hidden="true"></i>
+                        <i class="bi bi-battery icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body">
 
                             <h5 class="font"><strong>Battery Percent </strong></h5>
@@ -177,7 +179,8 @@
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
                                     <select class="btn font card-control period" 
-                                        onchange="view.redrawChart({type : 'appStatus' , value : value});">
+                                        onchange="collect.currentGraphDisplay('deviceStatus' , 1);"
+                                        id = "deviceStatusFreq">
 
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
@@ -187,12 +190,15 @@
                                 </div>
                                 <div class="text-right card-control-graph-right">
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'appStatus' , value : value});">
+                                    <select class="btn font card-control period" 
+                                        onchange="collect.currentGraphDisplay('deviceStatus' , 1);"
+                                        id = "deviceStatusDulation">
+
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day">1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
@@ -201,7 +207,9 @@
                                 </div>
                                 <div id="applicationGraph" class="font" style="height: 400px; min-width: 310px"></div>
                             </div>
+                        <div class = "backdrop"></div>
                         </div>
+                       
                     </div>
                     <div class="panel panel-default panel-collapse collapse" id="battPercent">
                         <div class="panel-body">
@@ -210,7 +218,10 @@
                             <div class="row">
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
-                                    <select class="btn font card-control period">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('battPercent' , 1);"
+                                            id = "battPercentFreq">
+
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
                                         <option value="1hr">1 hour</option>
@@ -220,13 +231,15 @@
                                 <div class="text-right card-control-graph-right">
                                     
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'battPercent' , value : value});">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('battPercent' , 1);"
+                                            id = "battPercentDulation">
 
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day" >1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
@@ -244,7 +257,9 @@
                             <div class="row">
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
-                                    <select class="btn font card-control period">
+                                    <select class="btn font card-control period"
+                                    onchange="collect.currentGraphDisplay('battHealth' , 1);"
+                                            id = "battHealthFreq">
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
                                         <option value="1hr">1 hour</option>
@@ -255,12 +270,14 @@
                                 <div class="text-right card-control-graph-right">
 
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'battHealth' , value : value});">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('battHealth' , 1);"
+                                            id = "battHealthDulation">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day" >1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
@@ -278,7 +295,9 @@
                             <div class="row">
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
-                                    <select class="btn font card-control period">
+                                    <select class="btn font card-control period"
+                                            onchange="collect.currentGraphDisplay('battTemp' , 1);"
+                                            id = "battTempFreq">
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
                                         <option value="1hr">1 hour</option>
@@ -288,13 +307,15 @@
 
                                 <div class="text-right card-control-graph-right">
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'battTemp' , value : value});">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('battTemp' , 1);"
+                                            id = "battTempDulation">
 
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day" >1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
@@ -312,6 +333,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="panel panel-default card-panel">
+                        <i class="fa fa-hdd-o icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body data-storage">
 
                         </div>
@@ -325,6 +347,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="panel panel-default card-panel">
+                        <i class="fa fa-floppy-o icon-card pull-right" aria-hidden="true"></i>
                         <div class="panel-body data-storage">
                         </div>
                         <div class="panel-footer card" data-toggle="collapse" data-target="#memory" onclick="view.toggleDiv('memory')">
@@ -366,7 +389,9 @@
                             <div class="row">
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
-                                    <select class="btn font card-control period">
+                                    <select class="btn font card-control period"
+                                            onchange="collect.currentGraphDisplay('storage' , 1);"
+                                            id = "storageFreq">
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
                                         <option value="1hr">1 hour</option>
@@ -376,12 +401,14 @@
                                 <div class="text-right card-control-graph-right">
 
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'storage' , value : value});">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('storage' , 1);"
+                                            id = "storageDulation">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day" >1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
@@ -399,7 +426,9 @@
                             <div class="row">
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
-                                    <select class="btn font card-control period">
+                                    <select class="btn font card-control period"
+                                            onchange="collect.currentGraphDisplay('memory' , 1);"
+                                            id = "memoryFreq">
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
                                         <option value="1hr">1 hour</option>
@@ -409,13 +438,15 @@
                                 <div class="text-right card-control-graph-right">
 
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'memory' , value : value});">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('memory' , 1);"
+                                            id = "memoryDulation">
 
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day">1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
@@ -433,7 +464,9 @@
                             <div class="row">
                                 <div class="text-left card-control-graph-left">
                                     <h6 class="font card-control">Frequency :</h6>
-                                    <select class="btn font card-control period">
+                                    <select class="btn font card-control period"
+                                            onchange="collect.currentGraphDisplay('pageCurrent' , 1);"
+                                            id = "pageCurrentFreq">
                                         <option value="5min">5 mins</option>
                                         <option value="15min">15 mins</option>
                                         <option value="1hr">1 hour</option>
@@ -443,12 +476,14 @@
                                 <div class="text-right card-control-graph-right">
 
                                     <h6 class="font card-control">Duration :</h6>
-                                    <select class="btn font card-control period" onchange="fetch.graph({type : 'pageCurrent' , value : value});">
+                                    <select class="btn font card-control period" 
+                                            onchange="collect.currentGraphDisplay('pageCurrent' , 1);"
+                                            id = "pageCurrentDulation">
                                         <option value="1hr">1 hr</option>
                                         <option value="3hr">3 hr</option>
                                         <option value="6hr">6 hr</option>
-                                        <option value="12hr" selected>12 hr</option>
-                                        <option value="1day">1 day</option>
+                                        <option value="12hr">12 hr</option>
+                                        <option value="1day" selected>1 day</option>
                                         <option value="1week">1 week</option>
                                         <option value="2week">2 week</option>
                                         <option value="1month">1 month</option>
